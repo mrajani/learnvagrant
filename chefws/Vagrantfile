@@ -1,0 +1,11 @@
+VAGRANTFILE_API_VERSION = "2"
+HOSTNAME = "chefws"
+HOSTIP   = "192.168.128.60"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/precise64"
+  config.vm.network :private_network, ip: HOSTIP
+  config.vm.define HOSTNAME do |barhost| end
+  config.vm.provider :virtualbox do |vbox|
+    vbox.name = HOSTNAME
+  end
+end
