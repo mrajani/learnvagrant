@@ -2,10 +2,26 @@ VAGRANTFILE_API_VERSION = "2"
 HOSTNAME = "chefserver"
 HOSTIP   = "192.168.128.40"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
   config.vm.box = "ubuntu/precise64"
   config.vm.network :private_network, ip: HOSTIP
-  config.vm.define HOSTNAME do |barhost| end
+  config.vm.define HOSTNAME do |host|
+  end
+
   config.vm.provider :virtualbox do |vbox|
+    vbox.customize ["modifyvm", :id, "--memory", 1024]
     vbox.name = HOSTNAME
   end
+
+  config.vm.provision :file do |file|
+    file.source      = "chef-server_11.1.3-1_amd64.deb"
+    file.destination = "/home/vagrant/chef-server_11.1.3-1_amd64.deb"
+  end
+
+  config.vm.provision :file do |file|
+    file.source = "provision.sh"
+    file.destination = "/home/vagrant/provision.sh"
+  end
+
+  config.vm.synced_folder "./shared", "/shared"
 end

@@ -1,0 +1,59 @@
+VAGRANTFILE_API_VERSION = "2"
+HOSTIP = "192.168.128.40"
+HOSTNAME = "chefserver"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  services = [
+    {'chefserver' =>
+      {
+        'ip' => "192.168.128.40"
+      }
+    },
+    {'chefws' =>
+      {
+        'ip' => "192.168.128.41"
+      }
+
+    }
+  ]
+
+  config.vm.box = "ubuntu/precise64"
+  config.vm.network :private_network, ip: HOSTIP
+  config.vm.define HOSTNAME do |barhost|
+  end
+  config.vm.provider :virtualbox do |vbox|
+    vbox.name = HOSTNAME
+  end
+  config.vm.provision "shell" do |s|
+    s.path = "provision.sh"
+  end
+
+  # config.vm.define "chefserver" do |cs|
+  #   cs.vm.box = "ubuntu/precise64"
+  #   cs.vm.network :private_network, ip: "192.168.128.40"
+  #   cs.vm.provider :virtualbox do |vbox|
+  #     vbox.name = "chefserver"
+  #   end
+  # end
+  #
+  # # config.vm.define "chefws" do |cs|
+  # #   cs.vm.box = "ubuntu/precise64"
+  # #   cs.vm.network :private_network, ip: "192.168.128.41"
+  # #   cs.vm.provider :virtualbox do |vbox|
+  # #     vbox.name = "chefws"
+  # #   end
+  # # end
+
+  # services.each do |service|
+  #   name  = service.keys.first
+  #   props = service.values.first
+  #   raise "Malformed vhost hash" if service.size > 1
+  #   config.vm.box = "ubuntu/precise64"
+  #   config.vm.network :private_network, ip: props["ip"]
+  #   config.vm.define name do |barhost| end
+  #   config.vm.provider :virtualbox do |vbox|
+  #     vbox.name = name
+  #   end
+  # end
+
+end
