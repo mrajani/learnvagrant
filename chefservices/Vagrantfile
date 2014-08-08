@@ -9,9 +9,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     guest.vm.network :private_network, ip: "192.168.128.40"
     guest.vm.provider :virtualbox do |vbox|
       vbox.name = "chefserver"
+      vbox.customize ["modifyvm", :id, "--memory", 1024]
     end
+    guest.vm.provision "file" do |file|
+        file.source      = "/Users/mrajani/Desktop/Stuff/Chef/chef-server/chef-server_11.1.1-1_amd64.deb"
+        file.destination = "/home/vagrant/chef-server_11.1.1-1_amd64.deb"
+    end
+    guest.vm.synced_folder "./shared", "/shared"
     guest.vm.provision "shell" do |s|
-      s.path = "provision.sh"
+      s.path = "./shared/chefserver.sh"
     end
   end
 
@@ -23,7 +29,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     guest.vm.provision "shell" do |s|
       s.path = "provision.sh"
     end
-end
+    guest.vm.synced_folder "./shared", "/shared"
+  end
 
 
 end
+###
+# /Users/mrajani/Desktop/Stuff/Chef/chef-server/chef-server_11.1.1-1_amd64.deb
