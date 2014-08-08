@@ -3,25 +3,26 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/precise64"
+  config.vm.box_check_update = false
 
-  config.vm.define "chefserver" do |config|
-    config.vm.network :private_network, ip: "192.168.128.40"
-    config.vm.provider :virtualbox do |vbox|
+  config.vm.define "chefserver" do |guest|
+    guest.vm.network :private_network, ip: "192.168.128.40"
+    guest.vm.provider :virtualbox do |vbox|
       vbox.name = "chefserver"
     end
-    config.vm.provision "shell" do |s|
+    guest.vm.provision "shell" do |s|
       s.path = "provision.sh"
     end
   end
 
-config.vm.define "chefws" do |config|
-  config.vm.network :private_network, ip: "192.168.128.41"
-  config.vm.provider :virtualbox do |vbox|
-    vbox.name = "chefws"
-  end
-  config.vm.provision "shell" do |s|
-    s.path = "provision.sh"
-  end
+  config.vm.define "chefws" do |guest|
+    guest.vm.network :private_network, ip: "192.168.128.41"
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "chefws"
+    end
+    guest.vm.provision "shell" do |s|
+      s.path = "provision.sh"
+    end
 end
 
 
