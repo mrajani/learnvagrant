@@ -1,11 +1,23 @@
 VAGRANTFILE_API_VERSION = "2"
+
 HOSTNAME = "chefws"
-HOSTIP   = "192.168.128.60"
+HOSTIP   = "192.168.128.41"
+
+
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
   config.vm.box = "ubuntu/precise64"
-  config.vm.network :private_network, ip: HOSTIP
-  config.vm.define HOSTNAME do |barhost| end
-  config.vm.provider :virtualbox do |vbox|
-    vbox.name = HOSTNAME
+
+  config.vm.define "chefws" do |guest|
+    guest.vm.network :private_network, ip: "192.168.128.41"
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "chefws"
+    end
+    guest.vm.provision "shell" do |s|
+      s.path = "../shared/chefclient.sh"
+    end
+    guest.vm.synced_folder "../shared", "/shared"
   end
+
 end
