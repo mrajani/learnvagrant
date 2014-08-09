@@ -2,4 +2,4 @@
 *.deb
 *.rpm
 .vagrant/*
-.chef/*
+.chef/*.*
