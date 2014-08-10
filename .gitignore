@@ -1,5 +1,6 @@
 .rake_test_cache
-*.deb
-*.rpm
-.vagrant/*
-.chef/*.*
+**/*.deb
+**/*.rpm
+**/.vagrant/*
+**/.chef/*.*
+**/*_rsa*

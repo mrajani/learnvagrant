@@ -14,10 +14,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     guest.vm.provider :virtualbox do |vbox|
       vbox.name = "chefws"
     end
+
+    guest.vm.synced_folder "../shared", "/shared"
+
     guest.vm.provision "shell" do |s|
       s.path = "../shared/chefclient.sh"
     end
-    guest.vm.synced_folder "../shared", "/shared"
+
+    guest.vm.provision :file do |file|
+      file.source      = "/Users/mrajani/.gitconfig"
+      file.destination = "/home/vagrant/.gitconfig"
+    end
+
+    guest.vm.provision :file do |file|
+      file.source      = "/Users/mrajani/.ssh/github_rsa"
+      file.destination = "/home/vagrant/.ssh/id_rsa"
+    end
+
+    guest.vm.provision :file do |file|
+      file.source      = "/Users/mrajani/.ssh/github_rsa.pub"
+      file.destination = "/home/vagrant/.ssh/id_rsa.pub"
+    end
   end
 
 end
