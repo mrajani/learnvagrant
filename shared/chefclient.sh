@@ -26,3 +26,12 @@ echo "vagrant" | sudo knife configure --initial \
 
 sudo knife client list
 sudo knife user list
+
+ssh-keyscan -H github.com >> /home/vagrant/.ssh/known_hosts
+#ssh -T git@github.com
+### ssh -T -oStrictHostKeyChecking=no git@github.com
+### git clone git@github.com:mrajani/chef-repo.git 2>/dev/null
+###
+### For some reason, git clone fails. get stderr out in vagrant
+### provisioner
+####
