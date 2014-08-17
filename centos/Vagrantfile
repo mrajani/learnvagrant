@@ -1,19 +1,19 @@
 VAGRANTFILE_API_VERSION = "2"
 
-HOSTNAME = "chefws"
-HOSTIP   = "192.168.128.41"
+HOSTNAME = "centos-1"
+HOSTIP   = "192.168.128.42"
 
 
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "ubuntu/precise64"
+  config.vm.box = "chef/centos-6.5"
   config.vm.box_check_update = false
 
-  config.vm.define "chefws" do |guest|
-    guest.vm.network :private_network, ip: "192.168.128.41"
+  config.vm.define "centos-1" do |guest|
+    guest.vm.network :private_network, ip: "192.168.128.42"
     guest.vm.provider :virtualbox do |vbox|
-      vbox.name = "chefws"
+      vbox.name = "centos-1"
     end
 
     guest.vm.synced_folder "../shared", "/shared"
@@ -34,13 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     guest.vm.provision "shell" do |s|
-      s.path = "../shared/chefclient.sh"
+       s.path = "../shared/gitsetup.sh"
     end
-
-    guest.vm.provision "shell" do |s|
-      s.path = "../shared/gitsetup.sh"
-    end
-
 
   end
 

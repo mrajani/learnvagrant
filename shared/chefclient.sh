@@ -1,5 +1,10 @@
 #!/bin/bash
 
+
+#
+# Install Chef Client for Ubuntu
+#
+
 echo "Running apt-get update in silent mode"
 sudo apt-get update -qq
 
@@ -25,23 +30,5 @@ echo "vagrant" | sudo knife configure --initial \
      --user vagrant \
      --config $dotchefdir/knife.rb -y ### -VVV
 
-
 sudo knife client list
 sudo knife user list
-
-# # Installing git
-# echo "Installing git in silent mode, try to run chef-solo"
-# sudo apt-get install -y -qq git
-# echo "Running ssh-keyscan"
-# ssh-keyscan github.com > /home/vagrant/.ssh/known_hosts 2>/dev/null
-# sudo chown vagrant:vagrant /home/vagrant/.ssh/known_hosts
-# echo "Running ssh -T"
-# ssh -T git@github.com
-# # ssh -T -oStrictHostKeyChecking=no git@github.com
-# echo "Cloning chef-repo"
-# echo "Login and run"
-# echo "git clone git@github.com:mrajani/chef-repo.git"
-# #
-# # For some reason, git clone fails. get stderr out in vagrant
-# # provisioner
-# #
