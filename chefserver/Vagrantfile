@@ -7,6 +7,7 @@ SYNCFOLDER    = "../shared"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/precise64"
+  config.vm.box_check_update = false
   config.vm.network :private_network, ip: HOSTIP
   config.vm.define HOSTNAME do |host|
   end
