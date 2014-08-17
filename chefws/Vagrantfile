@@ -8,6 +8,7 @@ HOSTIP   = "192.168.128.41"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/precise64"
+  config.vm.box_check_update = false
 
   config.vm.define "chefws" do |guest|
     guest.vm.network :private_network, ip: "192.168.128.41"
@@ -31,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       file.source      = "../shared/git_rsa.pub"
       file.destination = "/home/vagrant/.ssh/id_rsa.pub"
     end
-        
+
     guest.vm.provision "shell" do |s|
       s.path = "../shared/chefclient.sh"
     end

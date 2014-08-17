@@ -1,8 +1,8 @@
 #!/bin/bash
 
+echo "Running apt-get update in silent mode"
+sudo apt-get update -qq
 
-sudo apt-get update
-sudo apt-get install -y git
 
 echo Installing Chef Client
 curl -L https://www.opscode.com/chef/install.sh | sudo bash
@@ -10,28 +10,38 @@ curl -L https://www.opscode.com/chef/install.sh | sudo bash
 chefserver=192.168.128.40
 # Set password to password
 
-sudo mkdir /home/vagrant/.chef
-sudo cp /shared/.chef/*.pem /home/vagrant/.chef
-sudo touch /home/vagrant/.chef/knife.rb
+dotchefdir=/home/vagrant/.chef
+sudo mkdir $dotchefdir
+sudo chown -R vagrant:vagrant $dotchefdir
+sudo cp /shared/.chef/*.pem $dotchefdir
+sudo touch $dotchefdir/knife.rb
 
 echo "vagrant" | sudo knife configure --initial \
-     --admin-client-name admin --admin-client-key ./.chef/admin.pem \
+     --admin-client-name admin --admin-client-key $dotchefdir/admin.pem \
      --validation-client chef-validator \
-     --validation-key ./.chef/chef-validator.pem \
+     --validation-key $dotchefdir/chef-validator.pem \
      --server-url https://${chefserver}:443 \
      --repository "/home/vagrant/chef-repo" \
      --user vagrant \
-     --config ./.chef/knife.rb -y \
-     -VVV
+     --config $dotchefdir/knife.rb -y ### -VVV
+
 
 sudo knife client list
 sudo knife user list
 
-ssh-keyscan -H github.com >> /home/vagrant/.ssh/known_hosts
-#ssh -T git@github.com
-### ssh -T -oStrictHostKeyChecking=no git@github.com
-### git clone git@github.com:mrajani/chef-repo.git 2>/dev/null
-###
-### For some reason, git clone fails. get stderr out in vagrant
-### provisioner
-####
+# # Installing git
+# echo "Installing git in silent mode, try to run chef-solo"
+# sudo apt-get install -y -qq git
+# echo "Running ssh-keyscan"
+# ssh-keyscan github.com > /home/vagrant/.ssh/known_hosts 2>/dev/null
+# sudo chown vagrant:vagrant /home/vagrant/.ssh/known_hosts
+# echo "Running ssh -T"
+# ssh -T git@github.com
+# # ssh -T -oStrictHostKeyChecking=no git@github.com
+# echo "Cloning chef-repo"
+# echo "Login and run"
+# echo "git clone git@github.com:mrajani/chef-repo.git"
+# #
+# # For some reason, git clone fails. get stderr out in vagrant
+# # provisioner
+# #
