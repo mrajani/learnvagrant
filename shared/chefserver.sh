@@ -2,11 +2,12 @@
 
 dotchefdir="/shared/.chef"
 
-chefpkg=/home/vagrant/chef-server_11.1.3-1_amd64.deb
+chefpkg=/home/vagrant/chef-server_11.1.4-1_amd64.deb
 
 if [ -f $chefpkg ]; then
-    sudo dpkg -i $chefpkg
+  sudo dpkg -i $chefpkg
 fi
+
 sudo chef-server-ctl reconfigure
 sudo chef-server-ctl test
 
