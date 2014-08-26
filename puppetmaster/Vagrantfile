@@ -32,7 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     guest.vm.provision "shell" do |s|
-       s.path = "../shared/puppetmaster.sh"
+      s.path = "../shared/puppetmaster.sh"
+      s.args = " #{HOSTIP} #{HOSTNAME}"
     end
 
   end
