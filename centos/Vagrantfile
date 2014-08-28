@@ -1,6 +1,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
-HOSTNAME = "centos-1"
+HOSTNAME = "nodeb.iono.corp"
 HOSTIP   = "192.168.128.42"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -32,7 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     guest.vm.provision "shell" do |s|
-       s.path = "../shared/gitsetup.sh"
+       s.path = "../shared/puppetclient.sh"
+       s.args = " #{HOSTIP} #{HOSTNAME}"
     end
 
   end
