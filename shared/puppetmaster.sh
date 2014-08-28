@@ -1,9 +1,10 @@
 #!/bin/bash
 
-echo "$1 ${2}.iono.corp ${2} puppet" >> /etc/hosts
+
+echo "$1 ${2}.${3} ${2} puppet" >> /etc/hosts
 
 sudo /bin/sed -i.old \
-  "s/localhost.localdomain/${2}.iono.corp/" /etc/sysconfig/network
+  "s/localhost.localdomain/${2}.${3}/" /etc/sysconfig/network
 
 
 echo "Waiting for network service to restart"

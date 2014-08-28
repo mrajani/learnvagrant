@@ -2,6 +2,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 HOSTNAME = "puppetmaster"
 HOSTIP   = "192.168.128.50"
+DOMAIN   = "iono.corp"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -33,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.provision "shell" do |s|
       s.path = "../shared/puppetmaster.sh"
-      s.args = " #{HOSTIP} #{HOSTNAME}"
+      s.args = " #{HOSTIP} #{HOSTNAME} #{DOMAIN}"
     end
 
   end

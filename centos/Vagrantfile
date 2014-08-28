@@ -1,7 +1,8 @@
 VAGRANTFILE_API_VERSION = "2"
 
-HOSTNAME = "nodeb.iono.corp"
-HOSTIP   = "192.168.128.42"
+HOSTNAME = "nodeb"
+HOSTIP   = "192.168.128.155"
+DOMAIN   = "iono.corp"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -33,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.provision "shell" do |s|
        s.path = "../shared/puppetclient.sh"
-       s.args = " #{HOSTIP} #{HOSTNAME}"
+       s.args = " #{HOSTIP} #{HOSTNAME} #{DOMAIN}"
     end
 
   end
