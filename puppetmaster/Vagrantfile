@@ -1,18 +1,19 @@
 VAGRANTFILE_API_VERSION = "2"
 
-HOSTNAME = "puppetmaster"
-HOSTIP   = "192.168.128.50"
-DOMAIN   = "iono.corp"
+hostname = "puppetmaster"
+hostip   = "192.168.128.50"
+domain   = "iono.corp"
+box      = "chef/cent-6.5"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "chef/centos-6.5"
+  config.vm.box = box
   config.vm.box_check_update = false
 
-  config.vm.define HOSTNAME do |guest|
-    guest.vm.network :private_network, ip: HOSTIP
+  config.vm.define hostname do |guest|
+    guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
-      vbox.name = HOSTNAME
+      vbox.name = hostname
     end
 
     guest.vm.synced_folder "../shared", "/shared"
@@ -34,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.provision "shell" do |s|
       s.path = "../shared/puppetmaster.sh"
-      s.args = " #{HOSTIP} #{HOSTNAME} #{DOMAIN}"
+      s.args = " #{hostip} #{hostname} #{domain}"
     end
 
   end
