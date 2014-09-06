@@ -1,0 +1,23 @@
+VAGRANTFILE_API_VERSION = "2"
+
+hostname      = "node01"
+hostip        = "192.168.128.46"
+syncfolder    = "../shared"
+box           = "ubuntu/trusty64"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = box
+  config.vm.box_check_update = false
+
+  config.vm.define hostname do |guest|
+    guest.vm.network :private_network, ip: hostip
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "trusty_" + hostname
+    end
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "../shared/provision.sh"
+  end
+end
