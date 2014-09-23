@@ -1,0 +1,42 @@
+VAGRANTFILE_API_VERSION = "2"
+
+HOSTNAME      = "chefserver12"
+HOSTIP        = "192.168.128.140"
+SYNCFOLDER    = "../shared"
+chef_server_ver  = "chef-server-core_12.0.0-rc.4-1_amd64.deb"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu/precise64"
+  config.vm.box_check_update = false
+  config.vm.network :private_network, ip: HOSTIP
+  config.vm.define HOSTNAME do |host|
+  end
+
+  config.vm.provider :virtualbox do |vbox|
+    vbox.customize ["modifyvm", :id, "--memory", 2048]
+    vbox.name = HOSTNAME
+  end
+
+  config.vm.provision :file do |file|
+    file.source      = "~/Desktop/Stuff/Chef/chef-server/#{chef_server_ver}"
+    file.destination = "/home/vagrant/#{chef_server_ver}"
+  end
+
+  config.vm.synced_folder "../shared", "/shared"
+
+  config.vm.provision "shell" do |s|
+    s.path = "../shared/apt-update.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "../shared/gitsetup.sh"
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "../shared/chefserver12.sh"
+    s.args = "#{chef_server_ver}"
+    # s.args = " #{hostip} #{hostname} #{domain}"
+  end
+
+end
