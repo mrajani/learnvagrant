@@ -1,0 +1,44 @@
+VAGRANTFILE_API_VERSION = "2"
+
+
+hostname = "nodeb"
+hostip   = "192.168.128.155"
+domain   = "iono.corp"
+box      = "chef/centos-6.5"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = box
+  config.vm.box_check_update = false
+
+  config.vm.define hostname do |guest|
+    guest.vm.network :private_network, ip: hostip
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = hostname
+    end
+
+    guest.vm.synced_folder "../shared", "/shared"
+
+    guest.vm.provision :file do |file|
+      file.source      = "/Users/mrajani/.gitconfig"
+      file.destination = "/home/vagrant/.gitconfig"
+    end
+
+    guest.vm.provision :file do |file|
+      file.source      = "../shared/git_rsa"
+      file.destination = "/home/vagrant/.ssh/id_rsa"
+    end
+
+    guest.vm.provision :file do |file|
+      file.source      = "../shared/git_rsa.pub"
+      file.destination = "/home/vagrant/.ssh/id_rsa.pub"
+    end
+
+    guest.vm.provision "shell" do |s|
+       s.path = "../shared/puppetclient.sh"
+       s.args = " #{hostip} #{hostname} #{domain}"
+    end
+
+  end
+
+end

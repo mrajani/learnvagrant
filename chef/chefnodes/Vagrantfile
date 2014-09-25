@@ -1,0 +1,23 @@
+VAGRANTFILE_API_VERSION = "2"
+
+HOSTNAME      = "chefnode01"
+HOSTIP        = "192.168.128.45"
+SYNCFOLDER    = "../shared"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu/precise64"
+  config.vm.box_check_update = false
+  config.vm.network :private_network, ip: HOSTIP
+  config.vm.define HOSTNAME do |host|
+  end
+
+  config.vm.provider :virtualbox do |vbox|
+    vbox.customize ["modifyvm", :id, "--memory", 2048]
+    vbox.name = HOSTNAME
+  end
+
+  config.vm.provision "shell" do |s|
+    s.path = "../shared/provision.sh"
+  end
+end

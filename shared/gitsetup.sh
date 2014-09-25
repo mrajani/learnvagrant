@@ -5,7 +5,7 @@
 #
 
 echo "Running ssh-keyscan"
-for host in 192.30.252.128 192.30.252.129 192.30.252.130 github.com
+for host in 192.30.252.128 192.30.252.129 192.30.252.130 192.30.252.131 github.com
 do
   ssh-keyscan ${host} >> /home/vagrant/.ssh/known_hosts
 done
