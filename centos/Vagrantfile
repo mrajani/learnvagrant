@@ -5,6 +5,7 @@ hostname = "nodeb"
 hostip   = "192.168.128.155"
 domain   = "iono.corp"
 box      = "chef/centos-6.5"
+chef_serv_ver    = "chef-server-core-12.0.0_rc.4-1.el5.x86_64.rpm"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -15,10 +16,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
       vbox.name = hostname
+      vbox.customize ["modifyvm", :id, "--memory", 2048]
     end
 
     guest.vm.synced_folder "../shared", "/shared"
 
+    guest.vm.provision :file do |file|
+      file.source      = "~/Desktop/Stuff/Chef/chef-server/#{chef_serv_ver}"
+      file.destination = "/home/vagrant/#{chef_serv_ver}"
+    end
+    
     guest.vm.provision :file do |file|
       file.source      = "/Users/mrajani/.gitconfig"
       file.destination = "/home/vagrant/.gitconfig"
@@ -34,10 +41,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       file.destination = "/home/vagrant/.ssh/id_rsa.pub"
     end
 
-    guest.vm.provision "shell" do |s|
-       s.path = "../shared/puppetclient.sh"
-       s.args = " #{hostip} #{hostname} #{domain}"
-    end
+    # guest.vm.provision "shell" do |s|
+    #    s.path = "../shared/puppetclient.sh"
+    #    s.args = " #{hostip} #{hostname} #{domain}"
+    # end
 
   end
 

@@ -12,7 +12,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = box
   config.vm.box_check_update = false
   config.vm.network :private_network, ip: hostip
-  config.vm.hostname = "#{hostname}.#{domain}"
   config.vm.define hostname do |host|
   end
 

@@ -49,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "shell" do |s|
     s.path = "#{synced_folder}/gitsetup.sh"
-    s.args = "centos #{chef_serv_ver}"
+    s.args = "#{chef_serv_ver} centos"
     # s.args = " #{hostip} #{hostname} #{domain}"
   end
 

@@ -2,10 +2,14 @@
 
 dotchefdir="/shared/.chef"
 
-chefpkg=/home/vagrant/chef-server_11.1.4-1_amd64.deb
+chefpkg=/home/vagrant/${1}
 
-if [ -f $chefpkg ]; then
+if [[ ${2} == "centos" && -f $chefpkg ]]; then
+  sudo rpm -ivh $chefpkg
+elif [[ ${2} == "ubuntu" && -f $chefpkg ]]; then
   sudo dpkg -i $chefpkg
+else
+  exit
 fi
 
 sudo chef-server-ctl reconfigure
