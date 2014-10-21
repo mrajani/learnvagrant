@@ -4,19 +4,21 @@ hostname         = "chefserver12"
 hostip           = "192.168.128.140"
 domain           = "iono.corp"
 box              = "chef/centos-6.5"
-synced_folder    = "../../../shared"
-chef_serv_ver    = "chef-server-core-12.0.0_rc.4-1.el5.x86_64.rpm"
+synced_folder    = "~/Documents/Git/learnvagrant/shared"
+chef_serv_ver    = "chef-server-core-12.0.0_rc.5-1.el5.x86_64.rpm"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = box
   config.vm.box_check_update = true
   config.vm.network :private_network, ip: hostip
+  config.vm.hostname = "#{hostname}.#{domain}"
   config.vm.define hostname do |host|
   end
+  config.vm.synced_folder synced_folder, "/shared"
 
   config.vm.provider :virtualbox do |vbox|
-    vbox.customize ["modifyvm", :id, "--memory", 2048]
+    vbox.customize ["modifyvm", :id, "--memory", 1024]
     vbox.name = hostname
   end
 
@@ -24,8 +26,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     file.source      = "~/Desktop/Stuff/Chef/chef-server/#{chef_serv_ver}"
     file.destination = "/home/vagrant/#{chef_serv_ver}"
   end
-
-  config.vm.synced_folder synced_folder, "/shared"
 
   config.vm.provision :file do |file|
     file.source      = "/Users/mrajani/.gitconfig"
@@ -43,8 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision "shell" do |s|
-    s.path = "#{synced_folder}/provision.sh"
-    s.args = "centos"
+    s.path = "#{synced_folder}/chefserver12.sh"
+    s.args = "#{chef_serv_ver} centos"
   end
 
   config.vm.provision "shell" do |s|
