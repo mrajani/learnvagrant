@@ -1,0 +1,14 @@
+{
+  "name"        : "webserver",
+  "description" : "my description for webserver",
+  "default_attributes" : {
+    "apache" : {
+      "greeting" : "hello from webserver.json role"  
+    }
+  },
+
+  "run_list" : [
+    "recipe[apache]",
+    "recipe[apache::vhosts]"
+  ]
+}

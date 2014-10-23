@@ -1,0 +1,19 @@
+require 'rubygems'
+require 'chef/config'
+require 'chef/log'
+require 'chef/rest'
+ 
+chef_server_url = "https://chef-server.iono.corp"
+client_name = "nodeModule0""
+signing_key_filename=File.dirname(__FILE__) + "/.chef/client.pem"
+ 
+rest = Chef::REST.new(chef_server_url, client_name, signing_key_filename)
+nodes = rest.get_rest("/nodes/")
+ 
+JSON.create_id = ""
+ 
+nodes.keys.each do |node_name|
+    node = rest.get_rest("/nodes/#{node_name}/")
+    puts node["name"]
+end
+
