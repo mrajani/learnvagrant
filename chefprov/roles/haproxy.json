@@ -1,0 +1,19 @@
+{
+  "name"        : "haproxy",
+  "chef_type"   : "role",
+  "json_class"  : "Chef::Role",
+  "description" : "my description for webserver",
+  "default_attributes" : {
+    "haproxy" : {
+      "greeting" : "hello from haproxy.rb role"
+    }
+  },
+
+  "run_list" : [
+    "recipe[cpu]",
+    "recipe[build-essential]",
+    "recipe[haproxy]",
+    "recipe[my_motd]"
+  ]
+
+}

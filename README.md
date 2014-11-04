@@ -1,8 +1,8 @@
-Learning Vagrant by way of Chef Server Deployment
+Learning Vagrant by way of Chef Server and Puppet Master Deployment
 
 All Shell Scripts are in ./shared folder, which is mounted on the VM.
 
-All Chef setup are for Ubuntu versions 1[2|4].04
+All Chef setup are for CentOS v6.5
 
 chefserver.sh installs the open source chef server
 

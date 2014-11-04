@@ -25,10 +25,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # using a specific IP.
   config.vm.network "private_network", ip: "192.168.128.210"
   config.vm.synced_folder synced_folder, "/vagrant_data"
-  config.vm.hostname = "pvlb.iono.corp"
+  config.vm.hostname = "haproxy.iono.corp"
 
   config.vm.provider :virtualbox do |vbox|
-    vbox.name = "pvlb.iono.corp"
+    vbox.name = "haproxy"
   end
 
   config.vm.provision "shell" do |sh|
@@ -40,12 +40,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # path, and data_bags path (all relative to this Vagrantfile), and adding
   # some recipes and/or roles.
   #
+  config.vm.provision :file do |file|
+    file.source      = "/Users/mrajani/.gitconfig"
+    file.destination = "/home/vagrant/.gitconfig"
+  end
+
+  config.vm.provision :file do |file|
+    file.source      = "../shared/git_rsa"
+    file.destination = "/home/vagrant/.ssh/id_rsa"
+  end
+
+  config.vm.provision :file do |file|
+    file.source      = "../shared/git_rsa.pub"
+    file.destination = "/home/vagrant/.ssh/id_rsa.pub"
+  end
+
+
   config.vm.provision "chef_solo" do |chef|
-    chef.cookbooks_path = "chef/cookbooks"
-    chef.roles_path = "chef/roles"
-    chef.data_bags_path = "chef/data_bags"
-  #  chef.add_recipe "mysql"
-    chef.add_role "motd"
+  # chef.cookbooks_path = "chef/cookbooks"
+  # chef.roles_path = "chef/roles"
+  # chef.data_bags_path = "chef/data_bags"
+  # chef.add_role "motd"
+    chef.cookbooks_path = "cookbooks"
+    chef.roles_path = "roles"
+    chef.data_bags_path = "data_bags"
+    chef.add_role "haproxy"
+    chef.add_recipe "greeting"
 
   #   # You may also specify custom JSON attributes:
   #   chef.json = { mysql_password: "foo" }

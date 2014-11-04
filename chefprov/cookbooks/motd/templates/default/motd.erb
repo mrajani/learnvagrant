@@ -1,0 +1,6 @@
+
+
+Tne company is <%= node["motd"]["company"] %>
+<% if node["pci"]["in_scope"] -%>
+This server is PCI compliant
+<% end -%>

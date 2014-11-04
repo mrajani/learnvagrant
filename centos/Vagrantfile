@@ -21,11 +21,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.synced_folder "../shared", "/shared"
 
-    guest.vm.provision :file do |file|
-      file.source      = "~/Desktop/Stuff/Chef/chef-server/#{chef_serv_ver}"
-      file.destination = "/home/vagrant/#{chef_serv_ver}"
-    end
-    
+    # guest.vm.provision :file do |file|
+    #   file.source      = "~/Desktop/Stuff/Chef/chef-server/#{chef_serv_ver}"
+    #   file.destination = "/home/vagrant/#{chef_serv_ver}"
+    # end
+
     guest.vm.provision :file do |file|
       file.source      = "/Users/mrajani/.gitconfig"
       file.destination = "/home/vagrant/.gitconfig"
