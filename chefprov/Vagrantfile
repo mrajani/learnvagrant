@@ -12,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/precise64"
+  config.vm.box = "ubuntu/trusty64"
 
   # config.vm.box_check_update = false
 
@@ -55,17 +55,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     file.destination = "/home/vagrant/.ssh/id_rsa.pub"
   end
 
-
   config.vm.provision "chef_solo" do |chef|
-  # chef.cookbooks_path = "chef/cookbooks"
-  # chef.roles_path = "chef/roles"
-  # chef.data_bags_path = "chef/data_bags"
-  # chef.add_role "motd"
     chef.cookbooks_path = "cookbooks"
     chef.roles_path = "roles"
     chef.data_bags_path = "data_bags"
     chef.add_role "haproxy"
-    chef.add_recipe "greeting"
+    chef.add_recipe "apache2"
+    chef.add_recipe "apache_vhosts"
 
   #   # You may also specify custom JSON attributes:
   #   chef.json = { mysql_password: "foo" }

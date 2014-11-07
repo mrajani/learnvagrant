@@ -25,14 +25,14 @@ default['haproxy']['mode'] = "http"
 default['haproxy']['incoming_address'] = "0.0.0.0"
 default['haproxy']['incoming_port'] = 80
 default['haproxy']['members'] = [{
-  "hostname" => "webhost21",
-  "ipaddress" => "10.0.22.1",
-  "port" => 4000,
+  "hostname" => "localhost",
+  "ipaddress" => "127.0.0.1",
+  "port" => 8081,
   "ssl_port" => 4000
 }, {
-  "hostname" => "webhost22",
-  "ipaddress" => "10.0.22.2",
-  "port" => 4001,
+  "hostname" => "localhost",
+  "ipaddress" => "127.0.0.1",
+  "port" => 8082,
   "ssl_port" => 4001
 }]
 default['haproxy']['member_port'] = 8080
@@ -64,8 +64,8 @@ default['haproxy']['defaults_timeouts']['server'] = "50s"
 default['haproxy']['cookie'] = nil
 
 default['haproxy']['global_max_connections'] = 4096
-default['haproxy']['member_max_connections'] = 1000
-default['haproxy']['frontend_max_connections'] = 1000
+default['haproxy']['member_max_connections'] = 100
+default['haproxy']['frontend_max_connections'] = 2000
 default['haproxy']['frontend_ssl_max_connections'] = 2000
 
 default['haproxy']['install_method'] = 'package'
