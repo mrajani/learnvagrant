@@ -11,3 +11,8 @@ my_motd "hello" do
   title "world"
   action :create
 end
+
+my_motd_dirs do
+  deploy_to "dir1"
+  action 'delete'
+end
