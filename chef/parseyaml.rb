@@ -5,19 +5,6 @@
 require 'yaml'
 require 'pp'
 
-def shell_provisioner_args(yaml_arguments)
-  shell_arguments = Array.new
-
-  # Arguments may or may not be named,
-  # and named arguments may or may not have a value.
-  yaml_arguments.each do |argument|
-    argument.key?('name') && shell_arguments.push(argument['name'])
-    argument.key?('value') && shell_arguments.push(argument['value'])
-  end
-
-  shell_arguments
-end
-
 config = YAML.load_file(File.open("vagrant.chef.yml"))
 nodes = config['nodes']
 
