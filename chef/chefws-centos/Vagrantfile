@@ -5,8 +5,6 @@ hostip        = "192.168.128.41"
 synced_folder = "../../shared"
 domain        = "iono.corp"
 box           = "chef/centos-6.5"
-chef_serv_ver = "chef-server-11.1.5-1.el6.x86_64.rpm"
-
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -38,15 +36,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     guest.vm.provision "shell" do |sh|
-      # sh.path = "#{synced_folder}/provision.sh"
-      sh.inline = "curl -L https://www.opscode.com/chef/install.sh | sudo bash"
+      sh.inline = "curl -L -k https://www.opscode.com/chef/install.sh | sudo bash"
     end
 
     guest.vm.provision "shell" do |sh|
       sh.path = "#{synced_folder}/gitsetup.sh"
     end
 
+    guest.vm.provision "shell" do |sh|
+      sh.path = "#{synced_folder}/gitinstall.sh"
+      sh.args = "centos"
+    end
 
   end
-
 end

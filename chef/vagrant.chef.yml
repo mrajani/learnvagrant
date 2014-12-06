@@ -1,0 +1,74 @@
+---
+defaults: &defaults
+  box: chef/centos-6.5
+  memory: 512
+  shared_path : &shared_path
+    ~/Documents/Git/learnvagrant/shared
+  sync_folders:
+    host: ~/Documents/Git/learnvagrant/shared
+    guest: /shared
+nodes:
+  chefserver:
+    << : *defaults
+    hostname: chefserver12.iono.vm
+    memory: 1024
+    networks:
+      - private_network:
+          ip: 192.168.128.201
+    provisioners: &provisioners
+      file:
+        -
+          source:
+            /Users/mrajani/.gitconfig
+          destination:
+            /home/vagrant/.gitconfig
+        -
+          source:
+            ~/Documents/Git/learnvagrant/shared/git_rsa
+          destination:
+            /home/vagrant/.ssh/id_rsa
+        -
+          source:
+            ~/Documents/Git/learnvagrant/shared/git_rsa.pub
+          destination:
+            /home/vagrant/.ssh/id_rsa.pub
+        -
+          source:
+            "~/Desktop/Stuff/Chef/chef-server/chef-server-core-12.0.0-1.el6.x86_64.rpm"
+          destination:
+            "/home/vagrant/chef-server-core-12.0.0-1.el6.x86_64.rpm"
+      shell:
+        -
+          path: "~/Documents/Git/learnvagrant/shared/chefserver12.sh"
+          args:
+            - value: "chef-server-core-12.0.0-1.el6.x86_64.rpm"
+            - value: centos
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
+          args:
+            - value: centos
+  chefws:
+    << : *defaults
+    hostname: chefws.iono.vm
+    networks:
+      - private_network:
+          ip: 192.168.128.202
+    provisioners:
+      file:
+        -
+          source:
+            /Users/mrajani/.gitconfig
+          destination:
+            /home/vagrant/.gitconfig
+        -
+          source:
+            ~/Documents/Git/learnvagrant/shared/git_rsa
+          destination:
+            /home/vagrant/.ssh/id_rsa
+        -
+          source:
+            ~/Documents/Git/learnvagrant/shared/git_rsa.pub
+          destination:
+            /home/vagrant/.ssh/id_rsa.pub

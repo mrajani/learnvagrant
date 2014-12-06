@@ -5,7 +5,7 @@ hostip           = "192.168.128.140"
 domain           = "iono.corp"
 box              = "chef/centos-6.5"
 synced_folder    = "~/Documents/Git/learnvagrant/shared"
-chef_serv_ver    = "chef-server-core-12.0.0_rc.5-1.el5.x86_64.rpm"
+chef_serv_ver    = "chef-server-core-12.0.0-1.el6.x86_64.rpm"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
