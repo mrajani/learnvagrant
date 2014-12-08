@@ -36,7 +36,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     guest.vm.provision "shell" do |sh|
-      sh.inline = "curl -L -k https://www.opscode.com/chef/install.sh | sudo bash"
+      sh.inline = "curl -L -k https://www.opscode.com/chef/install.sh|sudo bash"
     end
 
     guest.vm.provision "shell" do |sh|

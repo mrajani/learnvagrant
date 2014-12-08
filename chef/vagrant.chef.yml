@@ -72,3 +72,12 @@ nodes:
             ~/Documents/Git/learnvagrant/shared/git_rsa.pub
           destination:
             /home/vagrant/.ssh/id_rsa.pub
+      shell:
+        -
+          path: "~/Documents/Git/learnvagrant/shared/chefws.sh"
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
+          args:
+            - value: centos

@@ -125,7 +125,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           prov_array.each do |provisioner|
             node.vm.provision "#{prov_type}" do |node_prov|
               provisioner.each do |key, value|
-                p "key #{key} value #{value}"
                 if key == 'args'
                   node_prov.args = shell_provisioner_args(value)
                 else
