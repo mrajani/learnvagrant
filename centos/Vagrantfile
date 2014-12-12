@@ -2,7 +2,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 
 hostname = "nodeb"
-hostip   = "192.168.128.155"
+hostip   = "192.168.128.48"
 synced_folder = "~/Documents/Git/learnvagrant/shared"
 domain   = "iono.corp"
 box      = "chef/centos-6.5"
@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define hostname do |guest|
     guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
-      vbox.name = hostname
+      vbox.name = "centos_" + hostname
     end
 
     guest.vm.synced_folder synced_folder, "/shared"
