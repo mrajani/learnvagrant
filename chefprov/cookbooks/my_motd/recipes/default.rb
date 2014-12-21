@@ -14,5 +14,5 @@ end
 
 my_motd_dirs do
   deploy_to "dir1"
-  action 'delete'
+  action 'create'
 end

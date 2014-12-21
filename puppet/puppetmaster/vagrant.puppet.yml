@@ -8,13 +8,13 @@ defaults: &defaults
     host: ~/Documents/Git/learnvagrant/shared
     guest: /shared
 nodes:
-  chefserver:
+  puppetmaster:
     << : *defaults
     hostname: puppetmaster.iono.vm
     memory: 1024
     networks:
       - private_network:
-          ip: 192.168.128.211
+          ip: 192.168.128.110
     provisioners: &provisioners
       file:
         -
@@ -36,7 +36,7 @@ nodes:
         -
           path: "~/Documents/Git/learnvagrant/shared/puppetmaster.sh"
           args:
-            - value: "192.168.128.211"
+            - value: "192.168.128.110"
             - value: "puppetmaster"
             - value: "iono.vm"
         -
