@@ -34,14 +34,14 @@ nodes:
             /home/vagrant/.ssh/id_rsa.pub
         -
           source:
-            "~/Desktop/Stuff/Chef/chef-server/chef-server-core-12.0.0-1.el6.x86_64.rpm"
+            "~/Desktop/Stuff/Chef/chef-server/chef-server-core-12.0.1-1.x86_64.rpm"
           destination:
-            "/home/vagrant/chef-server-core-12.0.0-1.el6.x86_64.rpm"
+            "/home/vagrant/chef-server-core-12.0.1-1.x86_64.rpm"
       shell:
         -
           path: "~/Documents/Git/learnvagrant/shared/chefserver12.sh"
           args:
-            - value: "chef-server-core-12.0.0-1.el6.x86_64.rpm"
+            - value: "chef-server-core-12.0.1-1.x86_64.rpm"
             - value: centos
         -
           path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"

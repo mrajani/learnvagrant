@@ -1,0 +1,18 @@
+{
+  "postgresql": {
+    "password": {
+      "postgres": "Abcd1234"
+    },
+    "config": {
+      "listen_addresses": "*"
+    },
+    "pg_hba" : [
+      {"type" :"host", "db" : "all", "user" : "all", "addr" : "0.0.0.0/0", "method": "trust" }
+    ] 
+  },
+  "run_list": [ 
+    "recipe[postgresql::client]", 
+    "recipe[postgresql::server]",
+    "recipe[postgresql::config_initdb]"
+  ]
+}

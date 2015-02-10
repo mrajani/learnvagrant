@@ -1,0 +1,21 @@
+{
+  "rabbitmq": {
+    "enabled_users": [
+      { 
+         "name": "iono", 
+         "password" : "Abcd1234", 
+         "rights" : [
+           { "vhosts" : "nil", "conf" : ".*", "write" : ".*", "read" : ".*" } 
+         ],
+         "tag": "administrator"
+      }
+    ]
+  },
+
+  "run_list": [ 
+    "recipe[rabbitmq]", 
+    "recipe[rabbitmq::mgmt_console]", 
+    "recipe[rabbitmq::user_management]"
+  ]
+}
+
