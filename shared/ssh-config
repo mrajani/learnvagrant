@@ -1,0 +1,14 @@
+Host gitlab.com
+Hostname gitlab.com
+IdentityFile ~/.ssh/id_rsa_gitlab
+User git
+
+Host github.com
+Hostname github.com
+IdentityFile ~/.ssh/id_rsa
+User git
+
+Host bitbucket.org
+Hostname bitbucket.org
+IdentityFile ~/.ssh/id_rsa_bb
+User git

@@ -1,0 +1,14 @@
+This is iono_motd template
+
+The operating system is <%= @operatingsystem %>
+The Release is <%= @operatingsystemrelease %> or <%= @lsbdistcodename %>
+<%- if @domain -%>
+The domain is <%= @domain %>
+<%- end -%>
+The hostname is <%= @fqdn %> and IP is <%= @ipaddress %>
+
+<%- interfaces.split(',').each do |intf|
+     unless intf =~ /lo/ -%>
+       <%= intf %> = <%= scope.lookupvar("network_#{intf}") %>
+    <%- end -%>
+<%- end -%>

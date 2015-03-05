@@ -19,21 +19,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.synced_folder synced_folder, "/shared"
 
-    guest.vm.provision :file do |file|
-      file.source      = "/Users/mrajani/.gitconfig"
-      file.destination = "/home/vagrant/.gitconfig"
-    end
-
-    guest.vm.provision :file do |file|
-      file.source      = "#{synced_folder}/git_rsa"
-      file.destination = "/home/vagrant/.ssh/id_rsa"
-    end
-
-    guest.vm.provision :file do |file|
-      file.source      = "#{synced_folder}/git_rsa.pub"
-      file.destination = "/home/vagrant/.ssh/id_rsa.pub"
-    end
-
     guest.vm.provision "shell" do |sh|
       sh.path = "#{synced_folder}/gitsetup.sh"
     end
