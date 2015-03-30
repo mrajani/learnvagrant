@@ -1,0 +1,49 @@
+require 'ipaddr'
+
+VAGRANTFILE_API_VERSION = "2"
+
+ipaddress     = "192.168.128.187"
+numberofboxes = 2
+synced_folder = "../shared"
+box           = "ubuntu/trusty64"
+
+ips = [ipaddress]
+numberofboxes.times do
+  ips << IPAddr.new(ips.last).succ.to_s
+end
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = box
+  config.vm.box_check_update = false
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
+  numberofboxes.times do |i|
+    octet = ips[i].split('.')[-1]
+    hostname = "node-" + octet
+    config.vm.define hostname do |guest|
+
+      guest.vm.hostname = hostname
+      guest.vm.network :private_network, ip: ips[i]
+      guest.vm.provider :virtualbox do |vbox|
+        vbox.name = "trusty_" + octet
+      end
+
+      guest.vm.synced_folder synced_folder, "/shared"
+
+      guest.vm.provision "shell" do |sh|
+        sh.path = "#{synced_folder}/gitsetup.sh"
+      end
+
+      guest.vm.provision "shell" do |sh|
+        sh.path = "#{synced_folder}/gitinstall.sh"
+        sh.args = "ubuntu"
+      end
+    end
+  end
+
+end

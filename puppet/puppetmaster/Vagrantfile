@@ -3,7 +3,7 @@ VAGRANTFILE_API_VERSION = "2"
 hostname = "puppetmaster"
 hostip   = "192.168.128.111"
 domain   = "iono.corp"
-box      = "chef/centos-6.5"
+box      = "chef/centos-6.6"
 synced_folder    = "~/Documents/Git/learnvagrant/shared"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -14,6 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define hostname do |guest|
     guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
+      vbox.customize ["modifyvm", :id, "--memory", 2048]
       vbox.name = hostname
     end
 
