@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = "2"
 ipaddress     = "192.168.128.187"
 numberofboxes = 2
 synced_folder = "../shared"
-box           = "ubuntu/trusty64"
+box           = "chef/centos-6.6"
 
 ips = [ipaddress]
 numberofboxes.times do
@@ -16,7 +16,7 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = box
-  config.vm.box_check_update = false
+  config.vm.box_check_update = true
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = false
   config.hostmanager.ignore_private_ip = false
@@ -41,7 +41,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       guest.vm.provision "shell" do |sh|
         sh.path = "#{synced_folder}/gitinstall.sh"
-        sh.args = "ubuntu"
+        sh.args = "centos"
       end
     end
   end
