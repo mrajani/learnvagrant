@@ -1,0 +1,42 @@
+VAGRANTFILE_API_VERSION = "2"
+
+hostname      = "ntphost"
+domain        = "iono.vm"
+hostip        = "192.168.128.162"
+synced_folder = "../shared"
+box           = "ubuntu/trusty64"
+# From http://www.tecmint.com/install-and-configure-ntp-server-client-in-debian/
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = box
+  config.vm.box_check_update = false
+
+  config.vm.box = box
+  config.vm.box_check_update = true
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.network :private_network, ip: hostip
+  config.vm.hostname = "#{hostname}.#{domain}"
+  config.hostmanager.aliases = %w(ntpserver)
+
+  config.vm.define hostname do |guest|
+    guest.vm.network :private_network, ip: hostip
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "trusty_" + hostname + "-"+ hostip.split('.')[-1]
+    end
+
+    guest.vm.synced_folder synced_folder, "/shared"
+
+    guest.vm.provision "shell" do |sh|
+      sh.path = "#{synced_folder}/gitsetup.sh"
+    end
+
+    guest.vm.provision "shell" do |sh|
+      sh.path = "#{synced_folder}/gitinstall.sh"
+      sh.args = "ubuntu"
+    end
+  end
+end

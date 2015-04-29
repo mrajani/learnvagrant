@@ -1,6 +1,6 @@
 ---
 defaults: &defaults
-  box: chef/centos-6.5
+  box: chef/centos-6.6
   memory: 512
   shared_path : &shared_path
     ~/Documents/Git/learnvagrant/shared
