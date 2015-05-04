@@ -18,14 +18,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.manage_host = false
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
-  config.vm.network :private_network, ip: hostip
   config.vm.hostname = "#{hostname}.#{domain}"
   config.hostmanager.aliases = %w(ntpserver)
 
   config.vm.define hostname do |guest|
     guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
-      vbox.name = "trusty_" + hostname + "-"+ hostip.split('.')[-1]
+      vbox.name = "u_" + hostname + "-"+ hostip.split('.')[-1]
     end
 
     guest.vm.synced_folder synced_folder, "/shared"

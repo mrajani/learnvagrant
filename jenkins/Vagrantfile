@@ -23,7 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.aliases = %w(ci-server)
 
   config.vm.define hostname do |guest|
-    guest.vm.network :private_network, ip: hostip
     guest.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--memory", 2048]
       vbox.name = "u_" + hostname + "-"+ hostip.split('.')[-1]
