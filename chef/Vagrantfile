@@ -72,6 +72,11 @@ VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Define vagrant VMs for each node defined in vagrant.yml
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+
   nodes.each do |node_name, node_details|
     config.vm.define node_name do |node|
 
@@ -80,8 +85,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       box_name = "#{node_details['box']}"
       node.vm.box = "#{box_name}"
 
-      # configure basic settings
+      # configure basic settings and hostmanager plugin
       node.vm.hostname = node_details['hostname']
+
 
       node.vm.provider 'virtualbox' do |vb|
         vb.customize [ 'modifyvm', :id, '--memory', node_details['memory'] ]
@@ -103,9 +109,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # configure synced folders
-      synced_folders = node_details['synced_folders']
-      synced_folders && synced_folders.each do |synced_folder|
-        node.vm.synced_folder synced_folder['host'], synced_folder['guest']
+      synced_folders = node_details['sync_folders']
+      synced_folders && synced_folders.each do |host, guest|
+        node.vm.synced_folder host, guest
       end
 
       # configure forwarded ports
