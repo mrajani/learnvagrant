@@ -1,11 +1,13 @@
 .rake_test_cache
 **/*.pem
+**/*.pub
 **/*.deb
 **/*.rpm
 **/.vagrant/*
 **/.chef/*.*
 **/*_rsa*
 **/*.gz
+**/*.iso
 
 ## From https://github.com/tacahilo/packer-centos-7/blob/master/.gitignore
 packer_cache/
