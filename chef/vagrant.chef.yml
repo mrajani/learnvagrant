@@ -1,6 +1,6 @@
 ---
 defaults: &defaults
-  box: chef/centos-6.6
+  box: bento/centos-6.7
   memory: 512
   shared_path : &shared_path
     ~/Documents/Git/learnvagrant/shared
@@ -26,14 +26,14 @@ nodes:
             /home/vagrant/.gitconfig
         -
           source:
-            "~/Downloads/chef-server-core-12.0.8-1.el6.x86_64.rpm"
+            "~/Downloads/chef-server-core-12.2.0-1.el6.x86_64.rpm"
           destination:
-            "/home/vagrant/chef-server-core-12.0.8-1.el6.x86_64.rpm"
+            "/home/vagrant/chef-server-core-12.2.0-1.el6.x86_64.rpm"
       shell:
         -
           path: "~/Documents/Git/learnvagrant/shared/chefserver12.sh"
           args:
-            - value: "chef-server-core-12.0.8-1.el6.x86_64.rpm"
+            - value: "chef-server-core-12.2.0-1.el6.x86_64.rpm"
             - value: centos
         -
           path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
@@ -64,3 +64,29 @@ nodes:
           path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
           args:
             - value: centos
+        -
+          path: "~/Documents/Git/learnvagrant/shared/provision.sh"
+
+
+  node-1:
+    << : *defaults
+    hostname: node-1.iono.vm
+    networks:
+      - private_network:
+          ip: 192.168.128.203
+    provisioners:
+      file:
+        -
+          source:
+            /Users/mrajani/.gitconfig
+          destination:
+            /home/vagrant/.gitconfig
+      shell:
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
+        -
+          path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
+          args:
+            - value: centos
+        -
+          path: "~/Documents/Git/learnvagrant/shared/provision.sh"

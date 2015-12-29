@@ -1,7 +1,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 hostname      = "ntphost"
-domain        = "iono.vm"
+domain        = "iono.box"
 hostip        = "192.168.128.162"
 synced_folder = "../shared"
 box           = "ubuntu/trusty64"
@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
   config.vm.hostname = "#{hostname}.#{domain}"
-  config.hostmanager.aliases = %w(ntpserver)
+  config.hostmanager.aliases = %w(ntpserver sslhost.iono.box www1.iono.box)
 
   config.vm.define hostname do |guest|
     guest.vm.network :private_network, ip: hostip

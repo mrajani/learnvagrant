@@ -5,6 +5,7 @@
 **/*.rpm
 **/.vagrant/*
 **/.chef/*.*
+**/.bundle/
 **/*_rsa*
 **/*.gz
 **/*.iso
