@@ -3,7 +3,7 @@ VAGRANTFILE_API_VERSION = "2"
 hostname = "puppetmaster"
 hostip   = "192.168.128.165"
 domain   = "iono.vm"
-box      = "bento/centos-6.7"
+box      = "bento/centos-7.2"
 synced_folder    = "~/Documents/Git/learnvagrant/shared"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -23,6 +23,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.synced_folder synced_folder, "/shared"
+
+  config.vm.provision "provision", type: "shell" do |sh|
+    sh.path = "#{synced_folder}/provision.sh"
+  end
 
   config.vm.provision "shell" do |sh|
     sh.path = "#{synced_folder}/gitsetup.sh"
