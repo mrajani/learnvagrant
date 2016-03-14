@@ -15,8 +15,13 @@ sudo chef-server-ctl user-create vagrant vagrant vagrant 'vagrant@iono.corp' \
   vagrant -f vagrant.pem
 
 sudo chef-server-ctl install opscode-manage
-sudo opscode-manage-ctl reconfigure
 sudo chef-server-ctl reconfigure
+sudo opscode-manage-ctl reconfigure
+
+sudo chef-server-ctl install opscode-reporting
+sudo chef-server-ctl reconfigure
+sudo reporting-manage-ctl reconfigure
+
 
 sudo chef-server-ctl org-create iono-org Iono_Org -a vagrant \
     -f iono-org-validator.pem
