@@ -3,7 +3,7 @@ VAGRANTFILE_API_VERSION = "2"
 hostname = "puppetmaster4"
 hostip   = "192.168.128.164"
 domain   = "iono.vm"
-box      = "bento/centos-6.7"
+box      = "puppetlabs/centos-7.2-64-nocm"
 synced_folder    = "~/Documents/Git/learnvagrant/shared"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
