@@ -1,0 +1,46 @@
+VAGRANTFILE_API_VERSION = "2"
+
+hostname      = "mongodb.iono.box"
+hostip        = "192.168.128.49"
+synced_folder = "../shared"
+box           = "ubuntu/trusty64"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = box
+  config.vm.box_check_update = false
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.hostmanager.aliases = %w(sslhost.iono.box www.iono.box)
+  config.vm.hostname = "#{hostname}"
+
+  config.vm.define hostname do |guest|
+    guest.vm.network :private_network, ip: hostip
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "trusty-" + hostname
+      # vbox.customize ["modifyvm", :id, "--memory", 1024]
+    end
+
+    guest.vm.synced_folder synced_folder, "/shared"
+
+    guest.vm.provision :shell do |sh|
+      sh.path = "#{synced_folder}/gitsetup.sh"
+    end
+
+    guest.vm.provision :shell do |sh|
+      sh.path = "#{synced_folder}/gitinstall.sh"
+      sh.args = "ubuntu"
+    end
+
+    guest.vm.provision "provision", type: "shell" do |sh|
+      sh.path = "#{synced_folder}/provision.sh"
+    end
+
+    guest.vm.provision "provision", type: "shell" do |sh|
+      sh.path = "mongodb.sh"
+    end
+
+  end
+end
