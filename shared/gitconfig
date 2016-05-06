@@ -6,8 +6,6 @@
 	email = mahesh@ionosolutions.com
 [push]
 	default = matching
-[alias]
-	co = checkout
 [color]
 	ui = auto
 	status = auto
