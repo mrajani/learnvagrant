@@ -1,0 +1,19 @@
+---
+- hostname: a49.iono.box
+  aliases: gitlab.iono.box git.iono.box
+  box: ubuntu/trusty64
+  memory: 2048
+  ip: 192.168.128.49
+  shared: ../shared
+  provisioners: &provisioners
+
+    file:
+      - source:
+          /Users/mrajani/.gitconfig
+        destination:
+          /home/vagrant/.gitconfig
+    shell:
+      - path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
+      - path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
+        args: ubuntu
+      - path: "~/Documents/Git/learnvagrant/shared/provision.sh"

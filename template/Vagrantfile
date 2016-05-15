@@ -1,45 +1,36 @@
+require 'yaml'
+require 'pp'
 VAGRANTFILE_API_VERSION = "2"
 
-hostname = "HOSTNAME"
-hostip   = "192.168.128.XX"
-domain   = "iono.vm"
-box      = "puppetlabs/centos-7.2-64-nocm"
-synced_folder    = "SYNC_FOLDER"
+node = YAML.load_file(File.open("vagrant.yml"))[0]
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = box
-  config.vm.box_check_update = true
+  config.vm.box = node['box']
+  config.vm.box_check_update = false
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = false
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
-  config.vm.network :private_network, ip: hostip
-  config.vm.hostname = "#{hostname}.#{domain}"
-  config.hostmanager.aliases = %w(puppet)
-  config.vm.provider :virtualbox do |vbox|
-    #vbox.customize ["modifyvm", :id, "--memory", 1024]
-    #vbox.customize ["modifyvm", :id, "--nic2", "INTNET", "--intnet2", "EXTNET"]
-    vbox.name = hostname + "-"+ hostip.split('.')[-1]
-  end
+  config.vm.hostname = node['hostname']
+  config.hostmanager.aliases = node['aliases'] if defined?(node['aliases'])
 
-  config.vm.synced_folder synced_folder, "/shared"
 
-  config.vm.provision "provision", type: "shell" do |sh|
-    sh.path = "#{synced_folder}/provision.sh"
-  end
+  config.vm.define node['hostname'] do |guest|
+    guest.vm.network :private_network, ip: node['ip']
+    guest.vm.provider :virtualbox do |vbox|
+      vbox.name = "trusty-" + node['hostname']
+      vbox.customize ["modifyvm", :id, "--memory", node['memory']]
+    end
 
-  config.vm.provision "shell" do |sh|
-    sh.path = "#{synced_folder}/gitsetup.sh"
-  end
+    guest.vm.synced_folder node['shared'], "/shared"
 
-  config.vm.provision "shell" do |s|
-    s.path = "#{synced_folder}/gitinstall.sh"
-    s.args = "centos"
-  end
+    node['provisioners']['shell'].each do |script|
+      guest.vm.provision :shell do |sh|
+        sh.path = script['path']
+        sh.args = script['args'] if defined?(script['args'])
+      end
+    end
 
-  config.vm.provision "shell" do |s|
-    s.path = "#{synced_folder}/puppetmaster4.sh"
-    s.args = " #{hostip} #{hostname} #{domain}"
   end
 end
