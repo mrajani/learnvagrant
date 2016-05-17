@@ -2,7 +2,7 @@ require 'yaml'
 require 'pp'
 VAGRANTFILE_API_VERSION = "2"
 
-node = YAML.load_file(File.open("vagrant.yml"))[0]
+node = YAML.load_file(File.open("vagrant.yml"))['nodes']
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     guest.vm.synced_folder node['shared'], "/shared"
 
-    node['provisioners']['shell'].each do |script|
+    node['shell'].each do |script|
       guest.vm.provision :shell do |sh|
         sh.path = script['path']
         sh.args = script['args'] if defined?(script['args'])
