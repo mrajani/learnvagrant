@@ -7,8 +7,8 @@ shell: &shell
   - path: "~/Documents/Git/learnvagrant/shared/provision.sh"
 
 nodes:
-    hostname: git.iono.box
-    aliases: gitlab.iono.box dvcs.iono.box
+    hostname: gitono.iono.box
+    aliases: g49.iono.box
     box: ubuntu/trusty64
     memory: 2048
     ip: 192.168.128.49

@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define node['hostname'] do |guest|
     guest.vm.network :private_network, ip: node['ip']
     guest.vm.provider :virtualbox do |vbox|
-      vbox.name = "trusty-" + node['hostname']
+      vbox.name = "u" + node['ip'].split('.')[-1] + "-" + node['hostname'] 
       vbox.customize ["modifyvm", :id, "--memory", node['memory']]
     end
 
