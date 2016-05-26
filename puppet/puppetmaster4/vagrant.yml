@@ -1,0 +1,17 @@
+---
+shell: &shell
+  - path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
+    args: "centos"
+  - path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
+    args:
+  - path: "~/Documents/Git/learnvagrant/shared/provision.sh"
+  - path: "~/Documents/Git/learnvagrant/shared/puppetmaster4.sh"
+
+nodes:
+    hostname: puppetmaster.iono.box
+    aliases: puppet.iono.box puppet puppetmaster
+    box: puppetlabs/centos-7.2-64-nocm
+    memory: 1024
+    ip: 192.168.128.55
+    shared: ../../shared
+    shell: *shell
