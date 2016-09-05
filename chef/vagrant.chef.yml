@@ -1,6 +1,6 @@
 ---
 defaults: &defaults
-  box: bento/centos-6.7
+  box: bento/centos-7.2
   memory: 512
   shared_path : &shared_path
     ~/Documents/Git/learnvagrant/shared
