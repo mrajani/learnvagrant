@@ -22,7 +22,7 @@ sudo firewall-cmd --list-all
 ## Adding  puppetlabs path to sudoers in secure_path when using sudo
 sudo sed -i "/^Defaults.*secure_path*/ s,$,:/opt/puppetlabs/bin," /etc/sudoers
 # Lower the jvm heap size
-sudo sed -i "s/2g/512m/g" /etc/sysconfig/puppetserver
+sudo sed -i "s/2g/1g/g" /etc/sysconfig/puppetserver
 # From Learning Puppet 4
 #sed -i -e 's#\(secure_path = .*\)$#\1:/opt/puppetlabs/bin#' /etc/sudoers
 # sudo puppet master --version
