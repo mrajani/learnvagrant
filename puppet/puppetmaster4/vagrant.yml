@@ -11,7 +11,7 @@ nodes:
     hostname: puppetmaster.iono.box
     aliases: puppet.iono.box puppet puppetmaster
     box: puppetlabs/centos-7.2-64-nocm
-    memory: 1024
+    memory: 2048
     ip: 192.168.128.55
     shared: ../../shared
     shell: *shell
