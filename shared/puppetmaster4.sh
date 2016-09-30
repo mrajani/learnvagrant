@@ -27,7 +27,7 @@ sudo sed -i "s/2g/512m/g" /etc/sysconfig/puppetserver
 #sed -i -e 's#\(secure_path = .*\)$#\1:/opt/puppetlabs/bin#' /etc/sudoers
 # sudo puppet master --version
 sudo puppet resource package puppetdb ensure=latest
-sudo puppet resource service puppetdb ensure=running enable=true
+sudo puppet resource service puppetdb ensure=stopped enable=true
 sudo puppet resource package puppetdb-termini ensure=latest
 sudo puppet config print confdir
 
