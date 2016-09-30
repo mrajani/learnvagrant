@@ -5,6 +5,7 @@ echo "Install Updates"
 echo "Installing Puppet4 PuppetDB"
 sudo yum install -y https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 sudo yum repolist
+sudo yum update -y
 sudo yum install -y puppet-agent puppetserver ntp
 
 sudo systemctl enable ntpd
@@ -18,13 +19,12 @@ sudo firewall-cmd --add-service=http --permanent
 sudo firewall-cmd --add-service=https --permanent
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-all
-
 ## Adding  puppetlabs path to sudoers in secure_path when using sudo
 sudo sed -i "/^Defaults.*secure_path*/ s,$,:/opt/puppetlabs/bin," /etc/sudoers
+# Lower the jvm heap size
+sudo sed -i "s/2g/512m/g" /etc/sysconfig/puppetserver
 # From Learning Puppet 4
 #sed -i -e 's#\(secure_path = .*\)$#\1:/opt/puppetlabs/bin#' /etc/sudoers
-
-
 # sudo puppet master --version
 sudo puppet resource package puppetdb ensure=latest
 sudo puppet resource service puppetdb ensure=running enable=true
