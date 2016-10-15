@@ -1,0 +1,21 @@
+---
+provisioners: &provref
+  script_folder: ~/Documents/Git/learnvagrant/shared/
+  shell: &scripts
+    script1: gitinstall.sh
+    script2: gitsetup.sh
+
+nodes:
+  - hostname: jenkins.iono.box
+    aliases: jenkins-ci
+    box: boxcutter/centos72
+    os: centos
+    release: centos
+    memory: 1024
+    ip: 172.30.0.60
+    provisioners:
+      <<: *provref
+      shell:
+       <<: *scripts
+       local1: install_jenkins.sh
+       local2: install_nginx.sh
