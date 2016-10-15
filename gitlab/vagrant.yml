@@ -1,0 +1,19 @@
+---
+provisioners: &provref
+  script_folder: ~/Documents/Git/learnvagrant/shared/
+  shell: &scripts
+    script1: gitinstall.sh
+    script2: gitsetup.sh
+
+nodes:
+  - hostname: gitlab.iono.box
+    aliases: gitlab
+    box: boxcutter/centos72
+    os: centos
+    release: centos
+    memory: 1024
+    ip: 172.30.0.70
+    provisioners:
+      <<: *provref
+      shell:
+       <<: *scripts
