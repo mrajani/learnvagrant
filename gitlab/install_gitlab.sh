@@ -8,7 +8,7 @@ if [[ ${1} =~ centos|redhat ]]; then
   sudo yum install -y -q curl policycoreutils openssh-server openssh-clients
   sudo systemctl enable sshd
   sudo systemctl start sshd
-  sudo yum install postfix
+  sudo yum -y install postfix
   sudo systemctl enable postfix
   sudo systemctl start postfix
   sudo firewall-cmd --permanent --add-service=http
