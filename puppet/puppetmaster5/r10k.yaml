@@ -1,0 +1,18 @@
+---
+# The location to use for storing cached Git repos
+:cachedir: '/var/cache/r10k'
+
+# A list of git repositories to create
+:sources:
+  # This will clone the git repository and instantiate an environment per
+  # branch in /etc/puppetlabs/code/environments
+   :my-org:
+     remote: 'https://github.com/mrajani/lyndapp_repo.git'
+     basedir: '/etc/puppetlabs/code/environments'
+
+  # This will clone the local git repository and instantiate an environment per
+  # branch in /etc/puppetlabs/code/environments
+#  :my-co:
+#    remote: 'file:///home/vagrant/lyndapp_repo/'
+#    basedir: '/etc/puppetlabs/code/environments'
+  #
