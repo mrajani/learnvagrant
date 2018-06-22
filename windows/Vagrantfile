@@ -1,0 +1,3 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "devopsguys/Windows2012R2Eval"
+end
