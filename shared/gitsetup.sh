@@ -5,10 +5,8 @@
 #
 
 user=vagrant
-os=${1}
-release=${2}
-if [[ ${release} == "xenial" ]]; then
-  user=ubuntu
+if [[ ! -z "${2}" ]]; then
+  user=${2}
 fi
 
 echo "Running ssh-keyscan"
