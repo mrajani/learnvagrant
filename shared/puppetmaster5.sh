@@ -18,23 +18,29 @@ sudo systemctl enable firewalld
 sudo systemctl start  firewalld
 sudo systemctl status firewalld
 
-sudo firewall-cmd --list-all
+# sudo firewall-cmd --list-all
 sudo firewall-cmd --add-port=8140/tcp --permanent --zone=public
 sudo firewall-cmd --add-service=ntp --permanent
 sudo firewall-cmd --add-service=http --permanent
 sudo firewall-cmd --add-service=https --permanent
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-all
+
 ## Adding  puppetlabs path to sudoers in secure_path when using sudo
 # sed -i -e 's#\(secure_path = .*\)$#\1:/opt/puppetlabs/bin#' /etc/sudoers
-sudo sed -i "/^Defaults.*secure_path*/ s,$,:/opt/puppetlabs/bin," /etc/sudoers
+sudo sed -i "/^Defaults.*secure_path*/ s,$,:/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin," /etc/sudoers
+
 # Lower the jvm heap size
 sudo sed -i "s/2g/1g/g" /etc/sysconfig/puppetserver
 # Not for prod
 echo "*.iono.*" | sudo tee /etc/puppetlabs/puppet/autosign.conf
 # sudo puppet master --version
 # Add eyaml
-sudo /opt/puppetlabs/bin/puppetserver gem install hiera-eyaml r10k
+sudo /opt/puppetlabs/bin/puppetserver gem install hiera-eyaml 
+
+# Install r10k lyn pp
+sudo /opt/puppetlabs/puppet/bin/gem install r10k
+sudo mkdir /etc/puppetlabs/r10k
 
 sudo puppet resource package puppetdb ensure=latest
 sudo puppet resource service puppetdb ensure=stopped enable=true
