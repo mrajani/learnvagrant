@@ -20,6 +20,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       guest.hostmanager.aliases = node['aliases'] if defined?(node['aliases'])
       guest.vm.box = node['box']
       guest.vm.network :private_network, ip: node['ip']
+      if node['gport'] && node['hport']
+           guest.vm.network :forwarded_port, guest: node['gport'], host: node['hport'] 
+      end
       guest.vm.provider :virtualbox do |vbox|
         vbox.name = vbname + "-" + node['ip'].split('.')[-1]
         #vbox.name = "#{node['os']}-" + vbname

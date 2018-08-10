@@ -12,6 +12,8 @@ nodes:
     os: ubuntu
     memory: 512
     ip: 192.168.128.18
+    gport: 5180
+    hport: 5180
     provisioners: *provref
 
   - hostname: xenial.iono.box
@@ -20,6 +22,8 @@ nodes:
     os: ubuntu
     memory: 512
     ip: 192.168.128.16
+    gport: 5280
+    hport: 5280
     provisioners: *provref
 
   - hostname: trusty.iono.box
