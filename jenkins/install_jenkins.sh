@@ -35,6 +35,18 @@ fi
 export JENKINS_URL=http://localhost:8080
 ssh-keygen -t rsa -b 2048 -N "" -f ~/.ssh/id_rsa_jenkins
 # copy id_rsa_jenkins.pub to jenkinsadmin SSH public keys
+url=http://localhost:8080/login
+while :
+do
+  sleep 5;
+  if [[ $(curl -so /dev/null --head ${url} -w %{http_code}) == 200 ]]
+  then
+    echo 'website is up'
+    break;
+  else
+    echo 'website is not up'
+  fi
+done
 wget http://localhost:8080/jnlpJars/jenkins-cli.jar
 # Enable jnlp agents port to 18080
 # java -jar /home/vagrant/jenkins-cli.jar -i ~/.ssh/id_rsa_jenkins \

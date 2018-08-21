@@ -8,11 +8,10 @@ provisioners: &provref
 nodes:
   - hostname: jenkins.iono.box
     aliases: jenkins-ci
-    box: boxcutter/centos72
+    box: bento/centos-7.5
     os: centos
-    release: centos
     memory: 1024
-    ip: 172.30.0.60
+    ip: 192.168.128.92
     provisioners:
       <<: *provref
       shell:

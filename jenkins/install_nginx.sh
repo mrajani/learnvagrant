@@ -7,6 +7,7 @@ if [[ ${1} =~ centos|redhat ]]; then
   echo Found Centos/Redhat
   sudo yum install -y -q epel-release
   sudo yum install -y -q nginx
+  cp /vagrant/jenkins_nginx_centos.conf /etc/nginx/conf.d
   sudo systemctl start  nginx
   sudo systemctl enable nginx
   sudo systemctl status nginx
@@ -20,4 +21,5 @@ else
   echo Found Debian/ubuntu
   sudo apt-get update -y
   sudo apt-get install -y nginx
+  cp /vagrant/jenkins_nginx_ubuntu.conf /etc/nginx/conf.d
 fi
