@@ -1,21 +1,19 @@
 ---
 shell: &shell
   - path: "~/Documents/Git/learnvagrant/shared/gitinstall.sh"
-    args: "ubuntu trusty"
+    args: "ubuntu"
   - path: "~/Documents/Git/learnvagrant/shared/gitsetup.sh"
-    args: "ubuntu trusty"
+    args: "ubuntu"
 
 nodes:
     hostname: gitono.iono.box
     aliases: g49.iono.box
-    box: ubuntu/trusty64
+    box: bento/ubuntu-18.04
     memory: 512
     ip: 192.168.128.77
-    shared: ../shared
+    gport: 4000
+    hport: 4000
+    shared: 
+      - ../shared
+      - meanapp
     shell: *shell
-
-#     file:
-#       - source:
-#           /Users/mrajani/.gitconfig
-#         destination:
-#           /home/vagrant/.gitconfig
