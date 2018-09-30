@@ -1,14 +1,8 @@
-Learning Vagrant by way of Chef Server and Puppet Master Deployment
+Automate VM deployment wth Vagrant
 
-All Shell Scripts are in ./shared folder, which is mounted on the VM.
+Most Shell Scripts are in ./shared folder, which is mounted on the VM.
+Also some scripts hosted on gist.github.com
 
-All Chef setup are for CentOS v6.5
+vagrant.yml has configurations for the VMs
 
-chefserver.sh installs the open source chef server
-
-chefclient.sh installs chef client and creates an user 'vagrant'
-in chef.
-
-chefnodes - installs a plain node to manage from chef server
-
-See notes.
+Vagrantfile reads in vagrant.yml and starts up the VM
