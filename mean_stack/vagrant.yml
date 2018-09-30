@@ -1,0 +1,71 @@
+---
+provisioners: &provref
+  script_folder: ~/Documents/Git/learnvagrant/shared/
+  shell: &scripts
+    script1: gitinstall.sh
+    script2: gitsetup.sh
+  mntdir:
+    - meandir
+    - library
+  ports:
+      - ssh:
+          host: 2202
+          guest: 22
+      - angular:
+          host: 4000
+          guest: 4000
+      - express:
+          host: 4200
+          guest: 4200
+      - mongodb:
+          host: 27017
+          guest: 27017
+      - http:
+          host: 8080
+          guest: 80
+      - https:
+          host: 8443
+          guest: 443
+
+
+nodes:
+  - hostname: bionic.iono.box
+    aliases: bionic
+    box: bento/ubuntu-18.04
+    os: ubuntu
+    memory: 512
+    ip: 192.168.128.18
+    provisioners: *provref
+
+  - hostname: centos.iono.box
+    aliases: centos75
+    box: bento/centos-7.5
+    os: centos
+    memory: 512
+    ip: 192.168.128.75
+    provisioners: *provref
+
+  - hostname: xenial.iono.box
+    aliases: xenial
+    box: bento/ubuntu-16.04
+    os: ubuntu
+    memory: 512
+    ip: 192.168.128.16ß
+    provisioners: *provref
+
+# Sample configuration to override defaults above
+  # - hostname: trusty.iono.box
+  #   aliases: trusty
+  #   box: bento/ubuntu-14.04
+  #   os: ubuntu
+  #   memory: 512
+  #   ip: 192.168.128.14
+  #   provisioners: 
+  #     <<: *provref
+  #     shell:
+  #       <<: *scripts
+  #       script4: provision.sh
+  #     ports:
+  #       - ssh:
+  #           host: 9022
+  #           guest: 22
