@@ -10,8 +10,7 @@ if [[ ! -z "${2}" ]]; then
 fi
 
 echo "Running ssh-keyscan"
-for host in 192.30.252.128 192.30.252.129 192.30.252.130 192.30.252.131 \
-    github.com gitlab.com bitbucket.org
+for host in github.com gitlab.com bitbucket.org
 do
   ssh-keyscan ${host} >> /home/${user}/.ssh/known_hosts
 done

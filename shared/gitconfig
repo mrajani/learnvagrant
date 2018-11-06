@@ -37,7 +37,7 @@
   ds = diff --staged
   dn = diff --numstat
   dns = diff --staged --numstat
-  lg = log -p
+  lg = log --pretty='%Cred%h%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(cyan)[%an]%Creset' --graph --all
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   lolp = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -61,6 +61,7 @@
 	trustExitCode = true
 [diff]
 	tool = Kaleidoscope
+	algorithm = histogram
 [difftool]
 	prompt = false
 [mergetool]
@@ -69,5 +70,6 @@
 	tool = Kaleidoscope
 [core]
 	editor = /usr/bin/vim
+	pager = less -RFX
 [credential]
 	helper = osxkeychain
