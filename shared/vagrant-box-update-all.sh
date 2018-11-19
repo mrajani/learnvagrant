@@ -12,7 +12,7 @@ if [ ! ${#AVAILABLE_UPDATES[@]} -eq 0 ]; then
     VERSIONS=`vagrant box list | grep $box | cut -d ',' -f 2 | tr -d ' )'`
 
     # Add latest version
-    vagrant box add --clean $box
+    vagrant box add --provider virtualbox --clean $box
     BOX_UPDATED="TRUE"
 
     # Remove all old versions
