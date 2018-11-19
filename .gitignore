@@ -10,6 +10,10 @@
 **/*.gz
 **/*.iso
 **/*.log
+**/*.war
+**/*.jar
+**/*.ear
+**/*.class
 
 ## From https://github.com/tacahilo/packer-centos-7/blob/master/.gitignore
 packer_cache/
