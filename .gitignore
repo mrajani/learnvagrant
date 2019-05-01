@@ -87,3 +87,21 @@ typings/
 
 # next.js build output
 .next
+
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+# rsa keys
+**/*_rsa*
+
+# creds
+**/credentials
+**/*creds*
+
