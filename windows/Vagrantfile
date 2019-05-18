@@ -1,3 +1,22 @@
-Vagrant.configure("2") do |config|
-  config.vm.box = "devopsguys/Windows2012R2Eval"
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VAGRANTFILE_API_VERSION = "2"
+PROVISION_PS_SCRIPT = "provision.ps1"
+WINBOX = "StefanScherer/windows_2019"
+IP = "192.168.128.2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = WINBOX
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "Win2019"
+  end
+  config.vm.communicator = "winrm"
+  config.winrm.username = 'vagrant\vagrant'
+  config.vm.guest = :windows
+  config.vm.network :private_network, ip: IP
+
+  # config.vm.provision :shell,  :path => "#{PROVISION_PS_SCRIPT}", privileged: false
+  config.vm.provision "file", source: "installChoco.ps1", destination: "c:/tmp"
+  config.vm.provision "file", source: "apps.config", destination: "c:/tmp"
+  config.vm.provision "shell", path: "installChoco.ps1", :powershell_elevated_interactive => true
 end
