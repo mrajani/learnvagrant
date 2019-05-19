@@ -9,6 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = WINBOX
   config.vm.provider "virtualbox" do |vb|
     vb.name = "Win2019"
+    vb.linked_clone = true
   end
   config.vm.communicator = "winrm"
   config.winrm.username = 'vagrant\vagrant'
@@ -16,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :private_network, ip: IP
 
   # config.vm.provision :shell,  :path => "#{PROVISION_PS_SCRIPT}", privileged: false
-  config.vm.provision "file", source: "installChoco.ps1", destination: "c:/tmp"
-  config.vm.provision "file", source: "apps.config", destination: "c:/tmp"
+  config.vm.provision "file", source: "installChoco.ps1", destination: "c:/tmp/installChoco.ps1"
+  config.vm.provision "file", source: "apps.config", destination: "c:/tmp/apps.config"
   config.vm.provision "shell", path: "installChoco.ps1", :powershell_elevated_interactive => true
 end
