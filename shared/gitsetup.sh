@@ -16,6 +16,6 @@ do
 done
 
 cp /shared/gitconfig /home/${user}/.gitconfig
-cp /shared/ssh_id_rsa/* /home/${user}/.ssh
+cp /Scratch/ssh_id_rsa/* /home/${user}/.ssh
 cp /shared/ssh-config /home/${user}/.ssh/config
 sudo chown ${user}:${user} /home/${user}/.ssh/*
