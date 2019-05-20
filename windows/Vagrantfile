@@ -15,6 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.winrm.username = 'vagrant\vagrant'
   config.vm.guest = :windows
   config.vm.network :private_network, ip: IP
+  config.vm.synced_folder "~/Documents/Scratch", "/Scratch"
 
   # config.vm.provision :shell,  :path => "#{PROVISION_PS_SCRIPT}", privileged: false
   config.vm.provision "file", source: "installChoco.ps1", destination: "c:/tmp/installChoco.ps1"
