@@ -37,6 +37,7 @@
   ds = diff --staged
   dn = diff --numstat
   dns = diff --staged --numstat
+  deleted = log --diff-filter=D --summary
   lg = log --pretty='%Cred%h%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(cyan)[%an]%Creset' --graph --all
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
