@@ -1,0 +1,32 @@
+---
+provisioners: &provref
+  script_folder: ~/Documents/Git/learnvagrant/shared/
+  shell: &scripts
+    script1: gitinstall.sh
+    script2: gitsetup.sh
+  mntdir:
+    meandir:
+    library:
+  ports:
+      ssh:
+          host: 2202
+          guest: 22
+
+nodes:
+  - hostname: centos7.iono.box
+    aliases: centos7
+    box: centos/7
+    os: centos
+    memory: 2048
+    ip: 192.168.128.39
+    provisioners:
+      <<: *provref
+      ports:
+        ssh:
+            host: 50022
+            guest: 22
+        http:
+            host: 58443
+            guest: 8443
+      mntdir:
+        Scratch : ~/Documents/Scratch
