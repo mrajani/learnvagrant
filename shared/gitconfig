@@ -44,8 +44,7 @@
   lolp = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   ls = ls-files
   rhh = reset --hard HEAD
-  # show files only in commit  
-  files = "diff-tree --no-commit-id --name-only -r $1"
+  
   # Show files ignored by git:
   ign = clean -dXn
 
