@@ -5,7 +5,7 @@ User git
 
 Host github.com
 Hostname github.com
-IdentityFile ~/.ssh/id_rsa
+IdentityFile ~/.ssh/git_id_ecdsa
 User git
 
 Host bitbucket.org
@@ -13,6 +13,10 @@ Hostname bitbucket.org
 IdentityFile ~/.ssh/id_rsa_bb
 User git
 
-Host *.compute.amazonaws.com
+Host *compute*.amazonaws.com
 IdentityFile ~/.ssh/aws_tfadmin_id
 User ec2-user
+
+Host *.mylabserver.com
+IdentityFile ~/.ssh/lnxa_rsa
+User cloud_user
