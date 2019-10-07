@@ -5,7 +5,8 @@ hostname = "sslhost"
 hostip   = "192.168.128.187"
 synced_folder = "~/Documents/Git/learnvagrant/shared"
 domain   = "iono.corp"
-box      = "bento/centos-7.5"
+# box     = "bento/centos-7.5"
+box      = "centos/7"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -38,6 +39,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     guest.vm.provision "shell" do |sh|
       sh.path = "#{synced_folder}/provision.sh"
     end
+
+    guest.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
+
   end
 
 end
