@@ -1,0 +1,31 @@
+---
+- hosts: "{{ vagrant_hosts | default('all') }}"
+  become: yes
+  gather_facts: True
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: "Installing {{ packages }} on {{ ansible_hostname }}"
+      apt: update_cache=yes name={{ item }} state=present
+      loop: "{{ packages }}"
+    - name: "Copy git config"
+      become: False
+      copy:
+        src: /shared/gitconfig
+        dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
+    - name: "Copy ssh-config"
+      become: False
+      copy:
+        src: /shared/ssh-config
+        dest: "{{ lookup('env', 'HOME') }}/.ssh/config"
+    - name: "copy ssh keys"
+      become: False
+      copy:
+        src: /Scratch/ssh_id_rsa/
+        dest: "{{ lookup('env', 'HOME') }}/.ssh"
+        mode: '0600'
+        owner: "{{ lookup('env', 'USER') }}"
+        group: "{{ lookup('env', 'USER') }}"
+    - name: "set time zone"
+      timezone:
+        name: "{{ timezone }}"

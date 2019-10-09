@@ -1,0 +1,11 @@
+---
+vagrant_hosts: bionic
+packages:
+  - aptitude
+  - git
+  - unzip
+  - curl
+  - wget
+  - jq
+  - sshpass
+timezone: America/Los_Angeles
