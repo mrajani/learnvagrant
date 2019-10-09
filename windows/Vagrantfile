@@ -7,6 +7,7 @@ IP = "192.168.128.2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = WINBOX
+  config.vm.box_check_update = false
   config.vm.provider "virtualbox" do |vb|
     vb.name = "Win2019"
     vb.linked_clone = true
