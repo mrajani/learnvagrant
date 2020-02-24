@@ -3,9 +3,9 @@ require 'ipaddr'
 VAGRANTFILE_API_VERSION = "2"
 
 ipaddress     = "192.168.128.187"
-numberofboxes = 2
+numberofboxes = 1
 synced_folder = "../shared"
-box           = "bento/centos-6.7"
+box           = "centos/7"
 
 ips = [ipaddress]
 numberofboxes.times do
@@ -26,23 +26,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     octet = ips[i].split('.')[-1]
     hostname = "node-" + octet
     config.vm.define hostname do |guest|
-
+     
       guest.vm.hostname = hostname
       guest.vm.network :private_network, ip: ips[i]
       guest.vm.provider :virtualbox do |vbox|
-        vbox.name = "trusty_" + octet
+        vbox.name = "ansible_" + octet
       end
 
-      guest.vm.synced_folder synced_folder, "/shared"
-
-      guest.vm.provision "shell" do |sh|
-        sh.path = "#{synced_folder}/gitsetup.sh"
+      guest.vm.provision "ansible" do |ansible|
+        ansible.playbook = "playbook.yml"
       end
 
-      guest.vm.provision "shell" do |sh|
-        sh.path = "#{synced_folder}/gitinstall.sh"
-        sh.args = "centos"
-      end
     end
   end
 

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+#- hosts: "{{ hostname }}"
+  gather_facts: True
+  name: Installing Packages...
+  vars:
+    - packages: ['git', 'unzip', 'curl', 'wget', 'ansible', 'jq', 'sshpass']
+  tasks:
+    - name: Installing "{{ packages }}" on "{{ hostname }}"
+      yum:
+        name: "{{ packages }}"
+        state: latest
+
