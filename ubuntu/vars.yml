@@ -1,11 +1,17 @@
 ---
-vagrant_hosts: bionic
+vagrant_hosts: 
+  - bionic
 packages:
   - aptitude
-  - git
   - unzip
-  - curl
-  - wget
   - jq
-  - sshpass
+  - python3-pip
+ansible_python_interpreter: "/usr/bin/env python3"
 timezone: America/Los_Angeles
+tf_ver: 0.12
+
+repos:
+  - utilityscripts
+  - cloudiac
+  - learntf
+  - learnk8s

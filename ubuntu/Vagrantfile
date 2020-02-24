@@ -47,6 +47,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       guest.vm.provision "ansible", type: "ansible_local" do |ansible|
         ansible.playbook = node['ansible']
+        ansible.extra_vars = {
+          vagrant_hosts: "bionic"            
+        }
       end
 
       node['provisioners']['shell'] && node['provisioners']['shell'].each do \

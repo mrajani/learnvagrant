@@ -1,31 +1,68 @@
 ---
 - hosts: "{{ vagrant_hosts | default('all') }}"
-  become: yes
   gather_facts: True
   vars_files:
     - vars.yml
   tasks:
     - name: "Installing {{ packages }} on {{ ansible_hostname }}"
+      become: yes
       apt: update_cache=yes name={{ item }} state=present
       loop: "{{ packages }}"
+      when: ansible_facts['distribution'] == "Ubuntu"
+    - name: "install aws cli using pip3"
+      pip:
+        name: awscli
+        state: latest
+
     - name: "Copy git config"
-      become: False
       copy:
         src: /shared/gitconfig
-        dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
+        dest: "{{ ansible_env.HOME }}/.gitconfig"
     - name: "Copy ssh-config"
-      become: False
       copy:
         src: /shared/ssh-config
-        dest: "{{ lookup('env', 'HOME') }}/.ssh/config"
+        dest: "{{ ansible_env.HOME }}/.ssh/config"
     - name: "copy ssh keys"
-      become: False
       copy:
         src: /Scratch/ssh_id_rsa/
-        dest: "{{ lookup('env', 'HOME') }}/.ssh"
+        dest: "{{ ansible_env.HOME }}/.ssh"
         mode: '0600'
-        owner: "{{ lookup('env', 'USER') }}"
-        group: "{{ lookup('env', 'USER') }}"
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
     - name: "set time zone"
+      become: yes
       timezone:
         name: "{{ timezone }}"
+
+    - name: "install tfenv"
+      git:
+        accept_hostkey: yes
+        repo: https://github.com/tfutils/tfenv.git
+        dest: "{{ ansible_env.HOME }}/.tfenv"
+    - name: "install gpg"
+      lineinfile:
+        state: present
+        path: "~/.tfenv/use-gpgv"
+        line: "trust-tfenv: yes"
+        create: yes
+    - name: "symlinks terraform"
+      file:
+        path: ~/.local/bin/{{ item }}
+        src: ~/.tfenv/bin/{{ item }}
+        state: link
+        force: yes
+      loop: ['tfenv', 'terraform']
+    - name: "install terraform"
+      ignore_errors: True
+      shell: "~/.local/bin/tfenv install latest:^{{ tf_ver }} 2>/dev/null"
+      args:
+        warn: no
+
+    - name: "install my repos"
+      git:
+        accept_hostkey: yes
+        repo: "git@github.com:mrajani/{{ item }}.git"
+        dest: "{{ ansible_env.HOME }}/{{ item }}"
+        # key_file: ~/.ssh/git_id_ecdsa
+      with_items: "{{ repos }}"
+

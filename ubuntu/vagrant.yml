@@ -1,8 +1,7 @@
 ---
 provisioners: &provref
   shell: &scripts
-    script1: ~/Documents/Git/learnvagrant/shared/gitinstall.sh
-    script2: ~/Documents/Git/learnvagrant/shared/gitsetup.sh
+    script1: ~/Documents/Git/learnvagrant/shared/gitsetup.sh
   mntdir:
     meandir:
     library:
@@ -15,17 +14,17 @@ nodes:
   - hostname: bionic.iono.box
     ansible: playbook.yml
     aliases: bionic
-    box: ubuntu/bionic64
-    memory: 512
+    box: bento/ubuntu-18.04
+    memory: 2048
     ip: 192.168.128.49
     provisioners:
       <<: *provref
       ports:
-        ssh:
-            host: 50122
-            guest: 22
-        http:
-            host: 59443
+        http1:
+            host: 58080
+            guest: 8080
+        http2:
+            host: 58443
             guest: 8443
       mntdir:
         shared: ~/Documents/Git/learnvagrant/shared/
