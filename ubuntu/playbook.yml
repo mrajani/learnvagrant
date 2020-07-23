@@ -4,6 +4,18 @@
   vars_files:
     - vars.yml
   tasks:
+    - name: "Install Azure GPG Key"
+      become: yes
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: "Install Azure Repo"
+      become: yes
+      apt_repository:
+        update_cache: no
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_distribution_release }} main
+        state: present
+        filename: azure-cli
     - name: "Installing {{ packages }} on {{ ansible_hostname }}"
       become: yes
       apt: update_cache=yes name={{ item }} state=present
@@ -13,7 +25,6 @@
       pip:
         name: awscli
         state: latest
-
     - name: "Copy git config"
       copy:
         src: /shared/gitconfig
@@ -65,4 +76,3 @@
         dest: "{{ ansible_env.HOME }}/{{ item }}"
         # key_file: ~/.ssh/git_id_ecdsa
       with_items: "{{ repos }}"
-

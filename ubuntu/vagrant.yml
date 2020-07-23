@@ -7,7 +7,7 @@ provisioners: &provref
     library:
   ports:
     ssh:
-      host: 2202
+      host: 2232
       guest: 22
 
 nodes:
@@ -21,10 +21,10 @@ nodes:
       <<: *provref
       ports:
         http1:
-            host: 58080
+            host: 18080
             guest: 8080
         http2:
-            host: 58443
+            host: 18443
             guest: 8443
       mntdir:
         shared: ~/Documents/Git/learnvagrant/shared/
