@@ -1,32 +1,31 @@
 ---
 provisioners: &provref
-  script_folder: ~/Documents/Git/learnvagrant/shared/
   shell: &scripts
-    script1: gitinstall.sh
-    script2: gitsetup.sh
+    script1: ~/Documents/Git/learnvagrant/shared/gitsetup.sh
   mntdir:
     meandir:
     library:
   ports:
-      ssh:
-          host: 2202
-          guest: 22
+    ssh:
+      host: 2202
+      guest: 22
 
 nodes:
-  - hostname: centos7.iono.box
-    aliases: centos7
-    box: centos/7
-    os: centos
+  - hostname: focal.iono.box
+    ansible: playbook.yml
+    aliases: focal
+    box: bento/ubuntu-20.04 # ubuntu/focal64 
     memory: 2048
-    ip: 192.168.128.39
+    ip: 192.168.128.73
     provisioners:
       <<: *provref
       ports:
-        ssh:
-            host: 50022
-            guest: 22
-        http:
-            host: 58443
+        http1:
+            host: 48080
+            guest: 8080
+        http2:
+            host: 48443
             guest: 8443
       mntdir:
+        shared: ~/Documents/Git/learnvagrant/shared/
         Scratch : ~/Documents/Scratch
