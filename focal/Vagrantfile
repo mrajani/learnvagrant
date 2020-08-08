@@ -49,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.playbook = node['ansible']
         ansible.install_mode = "pip"
         ansible.extra_vars = {
-          vagrant_hosts: "focal"
+          vagrant_hosts: vbname
         }
       end
 
