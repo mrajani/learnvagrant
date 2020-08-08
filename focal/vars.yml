@@ -1,6 +1,6 @@
 ---
 vagrant_hosts:
-  - bionic
+  - focal
 packages:
   - aptitude
   - unzip
