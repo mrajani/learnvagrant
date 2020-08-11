@@ -1,0 +1,31 @@
+---
+provisioners: &provref
+  shell: &scripts
+    script1: ~/Documents/Git/learnvagrant/shared/gitsetup.sh
+  mntdir:
+    meandir:
+    library:
+  ports:
+    ssh:
+      host: 2292
+      guest: 22
+
+nodes:
+  - hostname: centos-8.iono.box
+    ansible: playbook.yml
+    aliases: centos-8
+    box: bento/centos-8.0
+    memory: 1024
+    ip: 192.168.128.91
+    provisioners:
+      <<: *provref
+      ports:
+        http1:
+            host: 12480
+            guest: 8080
+        http2:
+            host: 12443
+            guest: 8443
+      mntdir:
+        shared: ~/Documents/Git/learnvagrant/shared/
+        Scratch : ~/Documents/Scratch

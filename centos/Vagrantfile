@@ -1,49 +1,66 @@
+require 'yaml'
+require 'pp'
 VAGRANTFILE_API_VERSION = "2"
 
-
-hostname = "sslhost"
-hostip   = "192.168.128.187"
-synced_folder = "~/Documents/Git/learnvagrant/shared"
-domain   = "iono.corp"
-# box     = "bento/centos-7.5"
-box      = "centos/7"
+nodes = YAML.load_file(File.open("vagrant.yml"))['nodes']
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
-  config.vm.box = box
   config.vm.box_check_update = false
-  config.vm.hostname = "#{hostname}.#{domain}"
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = false
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  # if Vagrant.has_plugin?("vagrant-vbguest")
+  config.vbguest.auto_update = false
+  # end
 
-  config.vm.define hostname do |guest|
-    guest.vm.network :private_network, ip: hostip
-    guest.vm.provider :virtualbox do |vbox|
-      vbox.name = "c_" + hostname
+  nodes.each do |node, node_details|
+    vbname = node['hostname'].split('.')[0]
+    config.vm.define vbname do |guest|
+      guest.vm.hostname = node['hostname']
+      guest.hostmanager.aliases = node['aliases'] if defined?(node['aliases'])
+      guest.vm.box = node['box']
+      guest.vm.network :private_network, ip: node['ip']
+
+      guest.vm.provider :virtualbox do |vbox|
+        vbox.name = vbname + "-" + node['ip'].split('.')[-1]
+        #vbox.name = "#{node['os']}-" + vbname
+        #vbox.name = "u" + node['ip'].split('.')[-1] + "-" + node['hostname']
+        vbox.customize ["modifyvm", :id, "--memory", node['memory']] \
+          if node['memory']
+      end
+
+      node['provisioners']['ports'] && node['provisioners']['ports'].each do \
+        |proto, ports|
+        guest.vm.network :forwarded_port,
+          guest: ports['guest'],
+          host: ports['host'],
+          id: proto,
+          auto_correct: true
+      end
+
+      dirs = node['provisioners']['mntdir']
+      # pp dirs
+      dirs.each do |mounted, value|
+        guest.vm.synced_folder "#{value}", "/#{mounted}"
+      end
+
+      guest.vm.provision "ansible", type: "ansible_local" do |ansible|
+        ansible.playbook = node['ansible']
+        ansible.extra_vars = {
+          vagrant_hosts: vbname
+        }
+      end
+
+      node['provisioners']['shell'] && node['provisioners']['shell'].each do \
+        |key, value|
+        # name the provision script with key script1,script2,local1
+        guest.vm.provision "#{key}", type: "shell" do |sh|
+          sh.path = "#{value}" if (key =~ /^script\d/)
+          sh.path = "#{value}" if (key =~ /local/)
+        end
+      end
+
     end
-
-    guest.vm.provider :virtualbox do |vbox|
-      #vbox.customize ["modifyvm", :id, "--nic2", "intnet", "--intnet2", "blah"]
-    end
-
-    guest.vm.synced_folder synced_folder, "/shared"
-    guest.vm.synced_folder "~/Documents/Scratch", "/Scratch"
-
-    guest.vm.provision "shell" do |sh|
-      sh.path = "#{synced_folder}/gitsetup.sh"
-    end
-
-    guest.vm.provision "shell" do |sh|
-      sh.path = "#{synced_folder}/gitinstall.sh"
-      sh.args = "centos"
-    end
-
-    guest.vm.provision "shell" do |sh|
-      sh.path = "#{synced_folder}/provision.sh"
-    end
-
-    guest.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbook.yml"
-    end
-
   end
-
 end

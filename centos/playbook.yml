@@ -1,15 +1,77 @@
 ---
-- hosts: all
-  become: yes
-#- hosts: "{{ hostname }}"
+- hosts: "{{ vagrant_hosts | default('all') }}"
   gather_facts: True
-  name: Installing Packages...
-  vars:
-    - packages: ['epel-release', 'git', 'unzip', 'curl', 'wget', 
-       'ansible', 'jq', 'sshpass']
+  vars_files:
+    - vars.yml
   tasks:
-    - name: Installing "{{ packages }}" on "{{ hostname }}"
-      yum:
-        name: "{{ packages }}"
+    - name: "Install Azure Repository"
+      become: yes
+      yum_repository:
+        name: Azure_Repo
+        description: Microsoft Repo for Azure CLI
+        baseurl: https://packages.microsoft.com/yumrepos/azure-cli
+        gpgcheck: yes
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: "Installing {{ packages }} on {{ ansible_hostname }}"
+      become: yes
+      yum: update_cache=yes name={{ item }} state=present
+      loop: "{{ packages }}"
+      when: ansible_facts['distribution'] == "CentOS"
+    - name: "install aws cli using pip3"
+      pip:
+        name: awscli
         state: latest
+        extra_args: "--user --upgrade"
+    - name: "Copy git config"
+      copy:
+        src: /shared/gitconfig
+        dest: "{{ ansible_env.HOME }}/.gitconfig"
+    - name: "Copy ssh-config"
+      copy:
+        src: /shared/ssh-config
+        dest: "{{ ansible_env.HOME }}/.ssh/config"
+        mode: '0640'
+    - name: "copy ssh keys"
+      copy:
+        src: /Scratch/ssh_id_rsa/
+        dest: "{{ ansible_env.HOME }}/.ssh"
+        mode: '0600'
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+    - name: "set time zone"
+      become: yes
+      timezone:
+        name: "{{ timezone }}"
 
+    - name: "install tfenv"
+      git:
+        accept_hostkey: yes
+        repo: https://github.com/tfutils/tfenv.git
+        dest: "{{ ansible_env.HOME }}/.tfenv"
+    - name: "install gpg"
+      lineinfile:
+        state: present
+        path: "~/.tfenv/use-gpgv"
+        line: "trust-tfenv: yes"
+        create: yes
+    - name: "symlinks terraform"
+      file:
+        path: ~/.local/bin/{{ item }}
+        src: ~/.tfenv/bin/{{ item }}
+        state: link
+        force: yes
+      loop: ['tfenv', 'terraform']
+    - name: "install terraform"
+      ignore_errors: True
+      shell: "~/.local/bin/tfenv install latest:^{{ tf_ver }} 2>/dev/null"
+      args:
+        warn: no
+
+    - name: "install my repos"
+      git:
+        accept_hostkey: yes
+        repo: "git@github.com:mrajani/{{ item }}.git"
+        dest: "{{ ansible_env.HOME }}/{{ item }}"
+        # key_file: ~/.ssh/git_id_ecdsa
+      with_items: "{{ repos }}"
