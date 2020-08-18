@@ -78,3 +78,13 @@
         dest: "{{ ansible_env.HOME }}/{{ item }}"
         # key_file: ~/.ssh/git_id_ecdsa
       with_items: "{{ repos }}"
+
+    - name: "install git secrets"
+      git:
+        accept_hostkey: yes
+        repo: "https://github.com/awslabs/git-secrets.git"
+        dest: "{{ ansible_env.HOME }}/git-secrets"
+    - name: "register git secrets for aws"
+      shell:
+        chdir: $HOME/git-secrets/
+        cmd: make PREFIX=$HOME/.local install && git secrets --register-aws
