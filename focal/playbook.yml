@@ -24,10 +24,22 @@
       apt: update_cache=yes name={{ item }} state=present
       loop: "{{ packages }}"
       when: ansible_facts['distribution'] == "Ubuntu"
-    - name: "install aws cli using pip3"
-      pip:
-        name: awscli
-        state: latest
+
+    - name: "Download AWS CLI v2"
+      get_url:
+        dest: "{{ ansible_env.HOME }}/awscliv2.zip"
+        url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        mode: "0600"
+    - name: "Unzip AWS CLI v2"
+      unarchive:
+        src: "{{ ansible_env.HOME }}/awscliv2.zip"
+        dest: /tmp
+    - name: "Install AWS CLI v2"
+      become: no
+      shell: ./aws/install -i "{{ ansible_env.HOME }}/.local/aws-cli" -b "{{ ansible_env.HOME }}/.local/bin"
+      args:
+        chdir: /tmp/
+
     - name: "Copy my Git Config"
       copy:
         src: /shared/gitconfig
