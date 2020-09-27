@@ -26,6 +26,9 @@ nodes:
         http2:
             host: 48443
             guest: 8443
+        vault:
+            host: 48200
+            guest: 8200
       mntdir:
         shared: ~/Documents/Git/learnvagrant/shared/
         Scratch : ~/Documents/Scratch
