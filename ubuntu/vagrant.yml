@@ -1,7 +1,7 @@
 ---
 provisioners: &provref
   shell: &scripts
-    script1: ~/Documents/Git/learnvagrant/shared/gitsetup.sh
+    script1: init.sh
   mntdir:
     meandir:
     library:
@@ -11,21 +11,21 @@ provisioners: &provref
       guest: 22
 
 nodes:
-  - hostname: bionic.iono.box
+  - hostname: focal2.iono.box
     ansible: playbook.yml
-    aliases: bionic
-    box: bento/ubuntu-18.04
-    memory: 2048
+    aliases: focal2
+    box: bento/ubuntu-20.04
+    memory: 512
     ip: 192.168.128.49
     provisioners:
       <<: *provref
       ports:
         http1:
-            host: 18080
-            guest: 8080
+          host: 18080
+          guest: 8080
         http2:
-            host: 18443
-            guest: 8443
+          host: 18443
+          guest: 8443
       mntdir:
         shared: ~/Documents/Git/learnvagrant/shared/
-        Scratch : ~/Documents/Scratch
+        Scratch: ~/Documents/Scratch
