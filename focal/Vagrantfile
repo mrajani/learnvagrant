@@ -45,14 +45,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         guest.vm.synced_folder "#{value}", "/#{mounted}"
       end
 
-      guest.vm.provision "ansible", type: "ansible_local" do |ansible|
-        ansible.playbook = node['ansible']
-        ansible.install_mode = "pip"
-        ansible.extra_vars = {
-          vagrant_hosts: vbname
-        }
-      end
-
       node['provisioners']['shell'] && node['provisioners']['shell'].each do \
         |key, value|
         # name the provision script with key script1,script2,local1
@@ -60,6 +52,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           sh.path = "#{value}" if (key =~ /^script\d/)
           sh.path = "#{value}" if (key =~ /local/)
         end
+      end
+
+      guest.vm.provision "ansible", type: "ansible_local" do |ansible|
+        ansible.playbook = node['ansible']
+        ansible.extra_vars = {
+          vagrant_hosts: vbname
+        }
       end
 
     end
