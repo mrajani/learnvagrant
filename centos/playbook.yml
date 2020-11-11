@@ -4,74 +4,131 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: "Install Azure Repository"
+    - name: 'Install Azure GPG Key'
+      become: yes
+      rpm_key:
+        key: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: 'Add YUM Repo for Azure CLI'
       become: yes
       yum_repository:
-        name: Azure_Repo
-        description: Microsoft Repo for Azure CLI
+        name: Azure-CLI
+        description: Yum Report for Azure CLI
         baseurl: https://packages.microsoft.com/yumrepos/azure-cli
+        enabled: yes
         gpgcheck: yes
-        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    - name: 'Install Azure CLI'
+      become: yes
+      yum:
+        update_cache: yes
+        name: azure-cli
         state: present
-    - name: "Installing {{ packages }} on {{ ansible_hostname }}"
+
+    - name: 'Installing {{ packages }} on {{ ansible_hostname }}'
       become: yes
       yum: update_cache=yes name={{ item }} state=present
-      loop: "{{ packages }}"
-      when: ansible_facts['distribution'] == "CentOS"
-    - name: "install aws cli using pip3"
-      pip:
-        name: awscli
-        state: latest
-        extra_args: "--user --upgrade"
-    - name: "Copy git config"
+      loop: '{{ packages }}'
+      when: ansible_facts["distribution"] == "CentOS"
+
+    - name: 'Download AWS CLI v2'
+      get_url:
+        dest: '{{ ansible_env.HOME }}/awscliv2.zip'
+        url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        mode: '0600'
+    - name: 'Unzip AWS CLI v2'
+      unarchive:
+        src: '{{ ansible_env.HOME }}/awscliv2.zip'
+        dest: /tmp
+    - name: 'Install AWS CLI v2'
+      become: no
+      shell: ./aws/install -i "{{ ansible_env.HOME }}/.local/aws-cli" -b "{{ ansible_env.HOME }}/.local/bin"
+      args:
+        chdir: /tmp/
+    - name: 'Copy my Git Config'
       copy:
         src: /shared/gitconfig
-        dest: "{{ ansible_env.HOME }}/.gitconfig"
-    - name: "Copy ssh-config"
+        dest: '{{ ansible_env.HOME }}/.gitconfig'
+        mode: '0600'
+    - name: 'Copy ssh-config'
       copy:
         src: /shared/ssh-config
-        dest: "{{ ansible_env.HOME }}/.ssh/config"
-        mode: '0640'
-    - name: "copy ssh keys"
+        dest: '{{ ansible_env.HOME }}/.ssh/config'
+        mode: '0600'
+    - name: 'Copy my SSH keys'
       copy:
         src: /Scratch/ssh_id_rsa/
-        dest: "{{ ansible_env.HOME }}/.ssh"
+        dest: '{{ ansible_env.HOME }}/.ssh'
         mode: '0600'
-        owner: "{{ ansible_env.USER }}"
-        group: "{{ ansible_env.USER }}"
-    - name: "set time zone"
+        owner: '{{ ansible_env.USER }}'
+        group: '{{ ansible_env.USER }}'
+    - name: 'Populate .ssh/known_hosts with ssh-keyscan'
+      shell: 'ssh-keyscan {{ item }} >> {{ ansible_env.HOME }}/.ssh/known_hosts'
+      with_items:
+        - gitlab.com
+        - github.com
+        - bitbucket.org
+
+    - name: 'Set TimeZone'
       become: yes
       timezone:
-        name: "{{ timezone }}"
+        name: '{{ timezone }}'
 
-    - name: "install tfenv"
+    - name: 'Install tfenv'
       git:
         accept_hostkey: yes
         repo: https://github.com/tfutils/tfenv.git
-        dest: "{{ ansible_env.HOME }}/.tfenv"
-    - name: "install gpg"
+        dest: '{{ ansible_env.HOME }}/.tfenv'
+    - name: 'Install GPG'
       lineinfile:
         state: present
-        path: "~/.tfenv/use-gpgv"
-        line: "trust-tfenv: yes"
+        path: '~/.tfenv/use-gpgv'
+        line: 'trust-tfenv: yes'
         create: yes
-    - name: "symlinks terraform"
+        mode: '0600'
+    - name: 'Symlinks to Terraform and tfenv'
       file:
         path: ~/.local/bin/{{ item }}
         src: ~/.tfenv/bin/{{ item }}
         state: link
         force: yes
       loop: ['tfenv', 'terraform']
-    - name: "install terraform"
+    - name: 'Install Terraform using tfenv'
       ignore_errors: True
-      shell: "~/.local/bin/tfenv install latest:^{{ tf_ver }} 2>/dev/null"
+      shell: '~/.local/bin/tfenv install latest:^{{ tf_ver }} 2>/dev/null'
+      args:
+        warn: no
+    - name: 'Use Terraform'
+      ignore_errors: True
+      shell: '~/.local/bin/tfenv use latest'
       args:
         warn: no
 
-    - name: "install my repos"
+    - name: 'Clone my repos'
       git:
         accept_hostkey: yes
-        repo: "git@github.com:mrajani/{{ item }}.git"
-        dest: "{{ ansible_env.HOME }}/{{ item }}"
+        repo: 'git@github.com:mrajani/{{ item }}.git'
+        dest: '{{ ansible_env.HOME }}/{{ item }}'
         # key_file: ~/.ssh/git_id_ecdsa
-      with_items: "{{ repos }}"
+      with_items: '{{ repos }}'
+
+    - name: 'Clone Git Secrets'
+      git:
+        accept_hostkey: yes
+        repo: 'https://github.com/awslabs/git-secrets.git'
+        dest: '{{ ansible_env.HOME }}/git-secrets'
+    - name: 'Make install git-secrets for AWS'
+      shell:
+        chdir: $HOME/git-secrets/
+        cmd: make PREFIX=$HOME/.local install
+
+    - name: 'Install Signing Key for Keybase'
+      become: yes
+      rpm_key:
+        state: present
+        key: https://keybase.io/docs/server_security/code_signing_key.asc
+
+    - name: 'Install Keybase'
+      become: yes
+      yum:
+        name: https://prerelease.keybase.io/keybase_amd64.rpm
+        state: present

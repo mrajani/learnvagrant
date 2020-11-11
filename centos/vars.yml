@@ -3,17 +3,10 @@ vagrant_hosts:
   - centos-8
 packages:
   - git
-  - unzip
   - jq
-  - python3-pip
-  - azure-cli
-ansible_python_interpreter: "/usr/bin/env python3"
+ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
-tf_ver: 0.12
-
+tf_ver: 0.13
 repos:
   - utilityscripts
   - cloudiac
-  - learntf
-  - learnk8s
-  - learndocker
