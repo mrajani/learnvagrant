@@ -46,7 +46,7 @@
         owner: '{{ ansible_env.USER }}'
         group: '{{ ansible_env.USER }}'
     - name: 'Populate .ssh/known_hosts with ssh-keyscan'
-      shell: 'ssh-keyscan {{ item }} {{ ansible_env.HOME }}/.ssh/known_hosts'
+      shell: 'ssh-keyscan {{ item }} >> {{ ansible_env.HOME }}/.ssh/known_hosts'
       with_items:
         - gitlab.com
         - github.com
