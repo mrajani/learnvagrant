@@ -1,12 +1,20 @@
 ---
 vagrant_hosts:
   - alma8
+
 packages:
   - git
   - jq
+  - make
+  - wget
+  - pwgen
+
 ansible_python_interpreter: '/usr/bin/env python3'
+
 timezone: America/Los_Angeles
-tf_ver: 0.13
+
+tf_ver: 0.14
+
 repos:
   - utilityscripts
   - cloudiac

@@ -11,7 +11,7 @@ provisioners: &provref
       guest: 22
 
 nodes:
-  - hostname: alma-8.iono.box
+  - hostname: alma8.iono.box
     ansible: playbook.yml
     aliases: alma8
     box: almalinux/8
