@@ -1,6 +1,6 @@
 ---
 vagrant_hosts:
-  - centos-8
+  - alma8
 packages:
   - git
   - jq

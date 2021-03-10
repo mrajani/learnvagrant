@@ -11,10 +11,10 @@ provisioners: &provref
       guest: 22
 
 nodes:
-  - hostname: centos-8.iono.box
+  - hostname: alma-8.iono.box
     ansible: playbook.yml
-    aliases: centos8
-    box: bento/centos-8.0
+    aliases: alma8
+    box: almalinux/8
     memory: 1024
     ip: 192.168.128.91
     provisioners:
