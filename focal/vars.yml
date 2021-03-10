@@ -8,9 +8,10 @@ packages:
   - python3-pip
   - azure-cli
   - sshpass
+  - pwgen
 ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
-tf_ver: 0.13
+tf_ver: 0.14
 repos:
   - utilityscripts
   - cloudiac
