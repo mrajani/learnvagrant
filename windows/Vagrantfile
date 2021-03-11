@@ -1,25 +1,30 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = "2"
-PROVISION_PS_SCRIPT = "provision.ps1"
-WINBOX = "StefanScherer/windows_2019"
+PROVISION_PS_SCRIPT = "installChoco.ps1"
+APPS_CONFIG = "apps.config"
+
+# WINBOX = "StefanScherer/windows_2019"
+# WINBOX = "StefanScherer/windows_10"
+WINBOX = "staefy/win10pro_base"
 IP = "192.168.128.2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = WINBOX
-  config.vm.box_check_update = false
+  config.vm.box_check_update = true
+  config.vm.hostname = "winpro10"
   config.vm.provider "virtualbox" do |vb|
-    vb.name = "Win2019"
+    vb.name = WINBOX.split("/")[1]
     vb.linked_clone = true
   end
   config.vm.communicator = "winrm"
-  config.winrm.username = 'vagrant\vagrant'
+# config.winrm.username = 'vagrant\vagrant'
   config.vm.guest = :windows
   config.vm.network :private_network, ip: IP
   config.vm.synced_folder "~/Documents/Scratch", "/Scratch"
 
-  # config.vm.provision :shell,  :path => "#{PROVISION_PS_SCRIPT}", privileged: false
-  config.vm.provision "file", source: "installChoco.ps1", destination: "c:/tmp/installChoco.ps1"
-  config.vm.provision "file", source: "apps.config", destination: "c:/tmp/apps.config"
-  config.vm.provision "shell", path: "installChoco.ps1", :powershell_elevated_interactive => true
+# config.vm.provision :shell,  :path => "#{PROVISION_PS_SCRIPT}", privileged: false
+# config.vm.provision "file", source: "#{PROVISION_PS_SCRIPT}", destination: "c:/tmp/#{PROVISION_PS_SCRIPT}"
+  config.vm.provision "file", source: "#{APPS_CONFIG}", destination: "c:/tmp/#{APPS_CONFIG}"
+  config.vm.provision "shell", path: "#{PROVISION_PS_SCRIPT}", :powershell_elevated_interactive => true
 end
