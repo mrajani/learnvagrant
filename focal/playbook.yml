@@ -16,7 +16,7 @@
         update_cache: yes
         repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_distribution_release }} main
         state: present
-        mode: '0600'
+        mode: '0644'
         filename: azure-cli
 
     - name: 'Installing {{ packages }} on {{ ansible_hostname }}'
