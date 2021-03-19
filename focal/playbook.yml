@@ -19,6 +19,15 @@
         mode: '0644'
         filename: azure-cli
 
+    - name: 'Install Microsoft VSCode Repository'
+      become: yes
+      apt_repository:
+        update_cache: yes
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+        state: present
+        mode: '0644'
+        filename: msft-vscode
+
     - name: 'Installing {{ packages }} on {{ ansible_hostname }}'
       become: yes
       apt: update_cache=yes name={{ item }} state=present
