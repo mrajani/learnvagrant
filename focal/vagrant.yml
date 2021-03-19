@@ -14,7 +14,7 @@ nodes:
   - hostname: focal.iono.box
     ansible: playbook.yml
     aliases: focal
-    box: ubuntu/focal64 #bento/ubuntu-20.04
+    box: fasmat/ubuntu2004-desktop #bento/ubuntu-20.04
     memory: 2048
     ip: 192.168.128.73
     provisioners:
