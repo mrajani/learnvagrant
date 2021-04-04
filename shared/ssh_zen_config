@@ -1,0 +1,25 @@
+Host zenlab
+  Hostname 128.1.112.246
+  IdentityFile ~/.ssh/zenlab
+  User ionoadmin
+
+Host zenlab-internal
+  Hostname 172.16.30.171
+  IdentityFile ~/.ssh/zenlab
+  User ionoadmin
+
+Host zenlab-gitlab
+  Hostname 172.16.30.165
+  IdentityFile ~/.ssh/zenlab
+  User bitnami
+
+Host zenlab-jenkins
+  Hostname 172.16.30.166
+  IdentityFile ~/.ssh/zenlab
+  User bitnami
+
+Host zenlab-ansible
+  Hostname 172.16.30.177
+  IdentityFile ~/.ssh/zenlab
+  User ionoadmin
+

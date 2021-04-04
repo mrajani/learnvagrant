@@ -22,16 +22,7 @@ Host la*
   User cloud_user
   Include ~/.ssh/ssh_acg_config
 
-Host zenlab
-  Hostname 128.112.112.246
+Host zenlab*
   IdentityFile ~/.ssh/zenlab
-  User ionoadmin
+  Include ~/.ssh/ssh_zen_config
 
-Host zenlab-internal
-  Hostname 172.16.30.171
-  IdentityFile ~/.ssh/zenlab
-  User ionoadmin
-
-Host zenlab-gitlab
-  Hostname 172.16.30.165
-  IdentityFile ~/.ssh/zenlab
