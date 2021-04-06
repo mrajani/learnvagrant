@@ -1,0 +1,21 @@
+---
+- hosts:
+    - win
+
+tasks:
+  - name: Install Packages using Chocolatey
+    win_chocolatey:
+      name: googlechrome
+      state: present
+
+  - name: Install critical updates
+    win_updates:
+      category_names:
+        - CriticalUpdates
+        - SecurityUpdates
+      state: installed
+    register: update_result
+
+  - name: Reboot Windows if required
+    win_reboot:
+    when: update_result.reboot_required
