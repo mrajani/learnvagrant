@@ -1,12 +1,15 @@
 ---
 vagrant_hosts:
   - focal
+pip_pkg:
+  - 'ansible-lint[community,yamllint]'
 packages:
   - aptitude
   - unzip
   - jq
   - python3-pip
   - azure-cli
+  - powershell
   - sshpass
   - pwgen
 ansible_python_interpreter: '/usr/bin/env python3'
