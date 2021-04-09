@@ -1,0 +1,51 @@
+---
+- hosts: "{{ vagrant_hosts | default('all') }}"
+  gather_facts: True
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Copy my Git Config
+      copy:
+        src: /shared/gitconfig
+        dest: '{{ ansible_env.HOME }}/.gitconfig'
+        mode: '0600'
+
+    - name: Copy ssh-config
+      copy:
+        src: /shared/ssh-config
+        dest: '{{ ansible_env.HOME }}/.ssh/config'
+        mode: '0600'
+
+    - name: Copy my SSH keys
+      copy:
+        src: /Scratch/ssh_id_rsa/
+        dest: '{{ ansible_env.HOME }}/.ssh'
+        mode: '0600'
+        owner: '{{ ansible_env.USER }}'
+        group: '{{ ansible_env.USER }}'
+
+    - name: Populate .ssh/known_hosts with ssh-keyscan
+      shell: 'ssh-keyscan {{ item }} >> {{ ansible_env.HOME }}/.ssh/known_hosts'
+      with_items:
+        - gitlab.com
+        - github.com
+        - bitbucket.org
+
+    - name: Clone my repos
+      git:
+        accept_hostkey: yes
+        repo: 'git@github.com:mrajani/{{ item }}.git'
+        dest: '{{ ansible_env.HOME }}/{{ item }}'
+        # key_file: ~/.ssh/git_id_ecdsa
+      with_items: '{{ repos }}'
+
+    - name: Clone Git Secrets
+      git:
+        accept_hostkey: yes
+        repo: 'https://github.com/awslabs/git-secrets.git'
+        dest: '{{ ansible_env.HOME }}/git-secrets'
+
+    - name: 'Make install git-secrets for AWS'
+      shell:
+        chdir: $HOME/git-secrets/
+        cmd: make PREFIX=$HOME/.local install
