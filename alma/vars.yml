@@ -5,9 +5,19 @@ vagrant_hosts:
 packages:
   - git
   - jq
+  - azure-cli
+  - powershell
   - make
   - wget
   - pwgen
+  - tree
+  - code
+
+pips:
+  - docker
+  - boto
+  - boto3
+  - pywinrm
 
 ansible_python_interpreter: '/usr/bin/env python3'
 

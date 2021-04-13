@@ -1,8 +1,10 @@
 ---
 vagrant_hosts:
   - focal
+
 pip_pkg:
   - 'ansible-lint[community,yamllint]'
+
 packages:
   - aptitude
   - unzip
@@ -13,6 +15,14 @@ packages:
   - sshpass
   - pwgen
   - tree
+  - code
+
+pips:
+  - docker
+  - boto
+  - boto3
+  - pywinrm
+
 ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
 tf_ver: 0.14

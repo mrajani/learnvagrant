@@ -1,0 +1,137 @@
+---
+- name: Install Azure GPG Key
+  become: yes
+  rpm_key:
+    key: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+
+- name: Add YUM Repo for Azure CLI
+  become: yes
+  yum_repository:
+    name: azure-cli
+    description: Yum Report for Azure CLI
+    baseurl: https://packages.microsoft.com/yumrepos/azure-cli
+    enabled: yes
+    gpgcheck: yes
+
+- name: Install YUM repo for PowerShell for Linux
+  become: yes
+  get_url:
+    dest: /etc/yum.repos.d/powershell.repo
+    url: https://packages.microsoft.com/config/rhel/{{ ansible_distribution_major_version }}/prod.repo
+    mode: '0644'
+
+- name: Install Microsoft VSCode Repository
+  become: yes
+  yum_repository:
+    name: msft-vscode
+    description: Yum Repo for VSCode
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+    enabled: yes
+    gpgcheck: yes
+
+- name: Installing List of Packages
+  become: yes
+  dnf: update_cache=yes name={{ item }} state=present
+  loop: '{{ packages }}'
+  when: ansible_facts["distribution"] == "AlmaLinux"
+
+- name: Download AWS CLI v2
+  get_url:
+    dest: '{{ ansible_env.HOME }}/awscliv2.zip'
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    mode: '0600'
+
+- name: Unzip AWS CLI v2
+  unarchive:
+    src: '{{ ansible_env.HOME }}/awscliv2.zip'
+    dest: /tmp
+
+- name: Install AWS CLI v2
+  become: no
+  shell: ./aws/install -i "{{ ansible_env.HOME }}/.local/aws-cli" -b "{{ ansible_env.HOME }}/.local/bin"
+  register: result
+  args:
+    chdir: /tmp/
+  ignore_errors: True
+
+- name: Set TimeZone
+  become: yes
+  timezone:
+    name: '{{ timezone }}'
+
+- name: Install tfenv
+  git:
+    accept_hostkey: yes
+    repo: https://github.com/tfutils/tfenv.git
+    dest: '{{ ansible_env.HOME }}/.tfenv'
+
+- name: Install GPG
+  lineinfile:
+    state: present
+    path: '~/.tfenv/use-gpgv'
+    line: 'trust-tfenv: yes'
+    create: yes
+    mode: '0600'
+
+- name: Symlinks to Terraform and tfenv
+  file:
+    path: ~/.local/bin/{{ item }}
+    src: ~/.tfenv/bin/{{ item }}
+    state: link
+    force: yes
+  loop: ['tfenv', 'terraform']
+
+- name: Install Terraform using tfenv
+  ignore_errors: True
+  shell: '~/.local/bin/tfenv install latest:^{{ tf_ver }} 2>/dev/null'
+  args:
+    warn: no
+
+- name: Use Terraform
+  ignore_errors: True
+  shell: '~/.local/bin/tfenv use latest'
+  args:
+    warn: no
+
+- name: Clone Git Secrets
+  git:
+    accept_hostkey: yes
+    repo: 'https://github.com/awslabs/git-secrets.git'
+    dest: '{{ ansible_env.HOME }}/git-secrets'
+
+- name: Make install git-secrets for AWS
+  shell:
+    chdir: $HOME/git-secrets/
+    cmd: make PREFIX=$HOME/.local install
+
+- name: Install Signing Key for Keybase
+  become: yes
+  rpm_key:
+    state: present
+    key: https://keybase.io/docs/server_security/code_signing_key.asc
+
+- name: Install Keybase
+  become: yes
+  dnf:
+    name: https://prerelease.keybase.io/keybase_amd64.rpm
+    state: present
+
+- name: Install via Pip
+  pip:
+    name: '{{ pips }}'
+    extra_args: --user
+
+- name: Download Starfish
+  get_url:
+    url: https://starship.rs/install.sh
+    dest: '{{ ansible_env.HOME }}/'
+    mode: '0755'
+
+- name: Install Starfish
+  shell: '{{ ansible_env.HOME }}/install.sh -b {{ ansible_env.HOME }}/.local/bin -y'
+
+- name: Init Starfish in /.bashrc'
+  lineinfile:
+    path: '{{ ansible_env.HOME }}/.bashrc'
+    line: eval "$(starship init bash)"
