@@ -108,16 +108,16 @@
     name: '{{ pips }}'
     extra_args: --user
 
-- name: Download Starfish
+- name: Download Starship
   get_url:
     url: https://starship.rs/install.sh
     dest: '{{ ansible_env.HOME }}/'
     mode: '0755'
 
-- name: Install Starfish
+- name: Install Starship
   shell: '{{ ansible_env.HOME }}/install.sh -b {{ ansible_env.HOME }}/.local/bin -y'
 
-- name: Init Starfish in /.bashrc'
+- name: Init Starship in /.bashrc'
   lineinfile:
     path: '{{ ansible_env.HOME }}/.bashrc'
-    line: eval "$({{ ansible_env.HOME }}/.local/bin init bash)"
+    line: eval "$({{ ansible_env.HOME }}/.local/bin/starship init bash)"

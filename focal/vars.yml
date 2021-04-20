@@ -1,7 +1,4 @@
 ---
-vagrant_hosts:
-  - focal
-
 pip_pkg:
   - 'ansible-lint[community,yamllint]'
 
@@ -22,6 +19,7 @@ pips:
   - boto
   - boto3
   - pywinrm
+  - eg
 
 ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
