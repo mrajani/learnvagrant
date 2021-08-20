@@ -2,7 +2,7 @@
 - hosts: "{{ vagrant_hosts | default('all') }}"
   gather_facts: True
   vars_files:
-    - vars.yml
+    - /shared/vars_{{ ansible_distribution | lower }}.yml
   tasks:
     - name: Install Packages
       include_tasks: /shared/pkgs_{{ ansible_distribution | lower }}.yml
