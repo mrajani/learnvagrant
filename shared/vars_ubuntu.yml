@@ -23,7 +23,7 @@ pips:
 
 ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
-tf_ver: 0.14
+tf_ver: 1.0.2
 repos:
   - utilityscripts
   - cloudiac
