@@ -15,6 +15,7 @@ packages:
   - code
 
 pips:
+  - virtualenv
   - docker
   - boto
   - boto3
@@ -23,7 +24,7 @@ pips:
 
 ansible_python_interpreter: '/usr/bin/env python3'
 timezone: America/Los_Angeles
-tf_ver: 1.0.2
+tf_ver: 1.0.5
 repos:
   - utilityscripts
   - cloudiac
