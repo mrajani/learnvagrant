@@ -2,7 +2,17 @@ require 'yaml'
 require 'pp'
 VAGRANTFILE_API_VERSION = "2"
 
-nodes = YAML.load_file(File.open("vagrant.yml"))['nodes']
+current_dir = File.dirname(File.expand_path(__FILE__))
+if File.file?("#{current_dir}/vagrant.yml")
+    nodes = YAML.load_file("#{current_dir}/vagrant.yml")['nodes']
+else
+  at_exit do
+    puts 'Exiting, vagrant.yml not found'
+  end
+  raise 'error'
+end
+
+# nodes = YAML.load_file(File.open("vagrant.yml"))['nodes']
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_check_update = false
