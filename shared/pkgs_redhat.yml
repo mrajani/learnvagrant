@@ -34,7 +34,7 @@
   become: yes
   dnf: update_cache=yes name={{ item }} state=present
   loop: '{{ packages }}'
-  when: ansible_facts["distribution"] == "AlmaLinux"
+  when: ansible_facts["os_family"] == "RedHat"
 
 - name: Download AWS CLI v2
   get_url:
